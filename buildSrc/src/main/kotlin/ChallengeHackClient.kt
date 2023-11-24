@@ -17,12 +17,12 @@ object ChallengeHackClient {
         val challengeHackBackend = Field(
             type = "String",
             name = "CHALLENGE_HACK_BACKEND",
-            value = "\"a\"",
+            value = "\"http://94.45.223.241:46876\"",
         )
         val challengeHackWebsockets = Field(
             type = "String",
             name = "CHALLENGE_HACK_WEBSOCKETS",
-            value = "\"a\"",
+            value = "\"ws://94.45.223.241:46876/ws\"",
         )
 
         val jvmTarget = JavaVersion.VERSION_18.toString()

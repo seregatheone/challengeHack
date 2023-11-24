@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import core.ui.components.buttons.filled.FilledColorRoundedButton
+import core.ui.components.buttons.outlined.OutlinedRoundedButton
 
 @Composable
 fun WelcomePageScreen(
@@ -26,11 +30,9 @@ fun WelcomePageScreen(
 ) {
     Column(
         modifier = modifier
-//            .background(AppResources.colors.LightPurple)
+            .background(Color.Red)
             .statusBarsPadding()
-            .padding(top = 220.dp),
-//            .paint(painterResource(id = R.drawable.welcome_page_notes),
-//                contentScale = ContentScale.FillWidth),
+            .padding(top = 100.dp),
         verticalArrangement = Arrangement.Bottom
 
     ) {
@@ -43,24 +45,26 @@ fun WelcomePageScreen(
 //            Image(
 //                painter = painterResource(id = R.drawable.welcome_page_logo),
 //                contentDescription = null)
+            Text(text = "ZAlUPA EBANAYA" , color = Color.Black)
 //            FilledColorRoundedButton(
 //                modifier = Modifier
 //                    .padding(top = 32.dp),
 //                onClick = navigateToAuthorization,
-//                text = stringResource(id = R.string.login)
+//                text = "Login"
 //            )
 //            OutlinedRoundedButton(
 //                modifier = Modifier
 //                    .padding(top = 24.dp),
 //                onClick = navigateToRegistration,
-//                text = stringResource(id = R.string.signup)
+//                text = "Sing Up"
 //            )
-        }
+//        }
 //        Image(
 //            modifier = Modifier
 //                .padding(top = 80.dp),
 //            painter = painterResource(id = R.drawable.man_w_mic),
 //            contentDescription = null
 //        )
+        }
     }
 }

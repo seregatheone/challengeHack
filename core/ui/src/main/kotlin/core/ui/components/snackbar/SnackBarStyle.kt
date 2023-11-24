@@ -30,11 +30,11 @@ sealed class SnackBarStyle {
     object RedStyle :
         SnackBarStyle() {
         override val textColor: Color
-            get() = TODO()
+            get() = appColors.White
         override val backgroundColor: Color
-            get() = TODO()
+            get() = appColors.SystemError
         override val textStyle: TextStyle
-            get() = TODO()
+            get() = appTypography.titles.title1
 
 
         @Composable
@@ -47,11 +47,11 @@ sealed class SnackBarStyle {
     object GreenStyle :
         SnackBarStyle() {
         override val textColor: Color
-            get() = TODO()
+            get() = appColors.White
         override val backgroundColor: Color
-            get() = TODO()
+            get() = appColors.Online
         override val textStyle: TextStyle
-            get() = TODO()
+            get() = appTypography.titles.title1
 
 
         @Composable

@@ -40,6 +40,11 @@ data class TextSizes(
     val textSize8: TextUnit,
     val textSize6: TextUnit,
     val textSize5: TextUnit,
+    val textSize0_25: TextUnit,
+    val textSize0_15: TextUnit,
+    val textSize0_1: TextUnit,
+    val textSize0_5: TextUnit,
+    val textSize0_4: TextUnit,
 )
 
 
@@ -65,5 +70,10 @@ internal val regularTextSizes = TextSizes(
     textSize8 = 8.sp,
     textSize6 = 6.sp,
     textSize5 = 5.sp,
+    textSize0_15 = 0.15.sp,
+    textSize0_1 = 0.1.sp,
+    textSize0_5 = 0.5.sp,
+    textSize0_25 = 0.25.sp,
+    textSize0_4 = 0.4.sp,
 )
 

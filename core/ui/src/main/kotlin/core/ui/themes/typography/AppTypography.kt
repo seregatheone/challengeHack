@@ -13,107 +13,117 @@ import pat.project.challengehack.core.ui.R
 
 
 fun appTypography(dims: AppDimens): Typography = Typography(
-    headlines = 0
-//    headlines = Headlines(
-//        headline0 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W400,
-//            fontSize = dims.textSizes.textSize32,
-//            lineHeight = dims.textSizes.textSize40
-//        ),
-//        headline1 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W400,
-//            fontSize = dims.textSizes.textSize28,
-//            lineHeight = dims.textSizes.textSize36
-//        ),
-//        headline2 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W400,
-//            fontSize = dims.textSizes.textSize24,
-//            lineHeight = dims.textSizes.textSize32
-//        ),
-//    ),
-//
-//    display = Display(
-//        display = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W400,
-//            fontSize = dims.textSizes.textSize57,
-//            lineHeight = dims.textSizes.textSize64
-//        )
-//    ),
-//
-//    titles = Titles(
-//        title0 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize22,
-//            lineHeight = dims.textSizes.textSize28,
-//        ),
-//        title1 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W400,
-//            fontSize = dims.textSizes.textSize16,
-//            lineHeight = dims.textSizes.textSize24,
-//        ),
-//        title2 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize14,
-//            lineHeight = dims.textSizes.textSize20,
-//        ),
-//    ),
-//    label = Label(
-//        label0 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize14,
-//            lineHeight = dims.textSizes.textSize20,
-//        ),
-//        label1 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize12,
-//            lineHeight = dims.textSizes.textSize16,
-//        ),
-//            label2 = TextStyle(
-//                fontFamily = AppFontFamilies.Roboto,
-//                fontWeight = FontWeight.W500,
-//                fontSize = dims.textSizes.textSize11,
-//                lineHeight = dims.textSizes.textSize16,
-//            ),
-//    ),
-//    body = Body(
-//        body0 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize16,
-//            lineHeight = dims.textSizes.textSize24,
-//        ),
-//        body1 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize14,
-//            lineHeight = dims.textSizes.textSize20,
-//        ),
-//        body2 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize12,
-//            lineHeight = dims.textSizes.textSize16,
-//        ),
-//    ),
-//    links = Link(
-//        link2 = TextStyle(
-//            fontFamily = AppFontFamilies.Roboto,
-//            fontWeight = FontWeight.W500,
-//            fontSize = dims.textSizes.textSize16,
-//            lineHeight = dims.textSizes.textSize24,
-//        )
-//    )
+    headlines = Headlines(
+        headline0 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W400,
+            fontSize = dims.textSizes.textSize32,
+            lineHeight = dims.textSizes.textSize40
+        ),
+        headline1 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W400,
+            fontSize = dims.textSizes.textSize28,
+            lineHeight = dims.textSizes.textSize36
+        ),
+        headline2 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W400,
+            fontSize = dims.textSizes.textSize24,
+            lineHeight = dims.textSizes.textSize32
+        ),
+    ),
 
+    display = Display(
+        display = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W400,
+            fontSize = dims.textSizes.textSize57,
+            lineHeight = dims.textSizes.textSize64
+        )
+    ),
+
+    titles = Titles(
+        title0 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize22,
+            lineHeight = dims.textSizes.textSize28,
+        ),
+        title1 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W400,
+            fontSize = dims.textSizes.textSize16,
+            lineHeight = dims.textSizes.textSize24,
+            letterSpacing = dims.textSizes.textSize0_15,
+        ),
+        title2 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize14,
+            lineHeight = dims.textSizes.textSize20,
+            letterSpacing = dims.textSizes.textSize0_1
+        ),
+    ),
+    label = Label(
+        label0 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize14,
+            lineHeight = dims.textSizes.textSize20,
+            letterSpacing = dims.textSizes.textSize0_1
+        ),
+        label1 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize12,
+            lineHeight = dims.textSizes.textSize16,
+            letterSpacing = dims.textSizes.textSize0_5
+        ),
+        label2 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize11,
+            lineHeight = dims.textSizes.textSize16,
+            letterSpacing = dims.textSizes.textSize0_5
+        ),
+    ),
+    body = Body(
+        body0 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize16,
+            lineHeight = dims.textSizes.textSize24,
+            letterSpacing = dims.textSizes.textSize0_5
+        ),
+        body1 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize14,
+            lineHeight = dims.textSizes.textSize20,
+            letterSpacing = dims.textSizes.textSize0_25
+        ),
+        body2 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize12,
+            lineHeight = dims.textSizes.textSize16,
+            letterSpacing = dims.textSizes.textSize0_4
+        ),
+    ),
+    links = Link(
+        link2 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize16,
+            lineHeight = dims.textSizes.textSize24,
+            letterSpacing = dims.textSizes.textSize0_15
+        )
     )
+
+)
+
+
 
 
 @Immutable
