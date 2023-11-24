@@ -26,8 +26,21 @@ dependencies {
     implementation(Dependencies.Network.Logging.lib)
     implementation(Dependencies.Coroutines.lib)
 
+    implementation(Dependencies.RxJava2.lib)
+    implementation(Dependencies.RxJava2.androidLib)
+
+    implementation(Dependencies.Websocket.stompLib)
+
+    implementation(Dependencies.Paging.pagingLib)
+    implementation(Dependencies.Paging.pagingLib)
+
+    implementation(Dependencies.WebRtc.lib)
+    implementation(Dependencies.WebRtc.logger)
+
     api(project(":data:basic"))
 
     implementation(project(":backend:challengeHack"))
     implementation(project(":backend:utils"))
+    implementation(project(":backend:websockets"))
+    implementation(project(":backend:webRtc"))
 }
