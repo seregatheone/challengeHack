@@ -102,6 +102,16 @@ dependencies {
 
     implementation(Dependencies.Coroutines.lib)
 
+    implementation(Dependencies.Paging.pagingCompose)
+    implementation(Dependencies.Paging.pagingLib)
+
+    implementation(Dependencies.Websocket.stompLib)
+    implementation(Dependencies.RxJava2.lib)
+    implementation(Dependencies.RxJava2.androidLib)
+
+    implementation(Dependencies.WebRtc.lib)
+    implementation(Dependencies.WebRtc.logger)
+
     //module
     implementation(project(":core:ui"))
 
