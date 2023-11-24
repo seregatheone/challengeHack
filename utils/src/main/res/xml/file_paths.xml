@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path
+        name="challenge_hack_profile"
+        path="/files" />
+    <external-path
+        name="challenge_hack_files"
+        path="."/>
+</paths>
