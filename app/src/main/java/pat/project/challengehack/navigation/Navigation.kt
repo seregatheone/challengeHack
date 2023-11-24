@@ -49,7 +49,7 @@ fun Navigation(
                 },
                 navigateToRegistration = {
                     navController.navigate(Screens.Registration.destination())
-                }
+                },
             )
         }
 

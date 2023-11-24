@@ -14,7 +14,7 @@ fun TextComponent(
     modifier: Modifier = Modifier,
     value: String,
     shape: RoundedCornerShape = RoundedCornerShape(12.dp),
-    color: Color = AppResources.colors.SystemError
+    color: Color = AppResources.colors.MainRed
 ) {
     BasicText(
         text = value,

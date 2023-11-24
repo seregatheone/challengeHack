@@ -32,7 +32,7 @@ sealed class SnackBarStyle {
         override val textColor: Color
             get() = appColors.White
         override val backgroundColor: Color
-            get() = appColors.SystemError
+            get() = appColors.MainRed
         override val textStyle: TextStyle
             get() = appTypography.titles.title1
 
