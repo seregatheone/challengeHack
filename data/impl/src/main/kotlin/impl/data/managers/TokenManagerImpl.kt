@@ -1,7 +1,11 @@
 package impl.data.managers
 
 
+import android.util.Log
+import backend.utils.exceptions.NetworkError
 import backend.utils.manager.TokenManager
+import challengeHack.api.AuthApi
+import challengeHack.dto.auth.request.RefreshTokenDto
 import com.google.gson.GsonBuilder
 import impl.data.store.AuthorizationStore
 import kotlinx.coroutines.runBlocking
@@ -10,12 +14,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import pat.project.challengehack.data.impl.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 class TokenManagerImpl(
     private val store: AuthorizationStore,
     private val host: String,
 ) : TokenManager {
-//    private val authorizationApi: AuthApi = getRetrofit().create(AuthApi::class.java)
+    private val authorizationApi: AuthApi = getRetrofit().create(AuthApi::class.java)
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder().baseUrl(host).client(
             OkHttpClient.Builder().apply {
@@ -56,32 +61,26 @@ class TokenManagerImpl(
     }
 
     override suspend fun updateToken(): Result<String> {
-        return Result.failure(Error(""))
-//        val response = try {
-//            authorizationApi.updateToken(RefreshTokenDto(refreshToken))
-//        } catch (e: IOException) {
-//            return Result.failure(NetworkError(0))
-//        }
-//        if (response.isSuccessful) {
-//            try {
-//                val body = response.body()!!
-//                refreshToken = body.refreshToken
-//                return Result.success(body.accessToken)
-//            }
-////            catch (e: NullPointerException) {
-////                if (BuildConfig.DEBUG) {
-////                    Log.i
-////                }
-////            }
-//            catch (e: Exception) {
-//                if (BuildConfig.DEBUG) {
-//                    Log.i(
-//                        "updateToken in api",
-//                        e.message.toString()
-//                    )
-//                }
-//            }
-//        }
-//        return Result.failure(NetworkError(response.code()))
+        val response = try {
+            authorizationApi.updateToken(RefreshTokenDto(refreshToken))
+        } catch (e: IOException) {
+            return Result.failure(NetworkError(0))
+        }
+        if (response.isSuccessful) {
+            try {
+                val body = response.body()!!
+                refreshToken = body.refreshToken
+                return Result.success(body.accessToken)
+            }
+            catch (e: Exception) {
+                if (BuildConfig.DEBUG) {
+                    Log.i(
+                        "updateToken in api",
+                        e.message.toString()
+                    )
+                }
+            }
+        }
+        return Result.failure(NetworkError(response.code()))
     }
 }

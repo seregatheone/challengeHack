@@ -24,7 +24,6 @@ fun Navigation(
 ) {
     val navController = rememberNavController()
 
-
     NavHost(
         modifier = modifier,
         navController = navController,

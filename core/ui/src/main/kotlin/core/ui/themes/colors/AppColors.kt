@@ -7,10 +7,18 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 sealed class AppColors(
-
+    val Black: Color,
+    val Grey: Color,
+    val White: Color,
+    val SystemError: Color,
+    val Online: Color,
 ) {
     class DarkThemeAppColors : AppColors(
-
+        Black = Black,
+        Grey = Grey,
+        White = White,
+        SystemError = SystemError,
+        Online = Online,
     )
 }
 
