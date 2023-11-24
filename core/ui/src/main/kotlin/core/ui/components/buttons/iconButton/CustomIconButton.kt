@@ -18,7 +18,7 @@ fun CustomIconButton(
     iconButtonStyle: IconButtonStyles,
     onCLick: () -> Unit,
     color: Color, //= AppResources.colors.LightPurple,
-    tint: Color //= AppResources.colors.Black
+    tint: Color = AppResources.colors.Black
 ) {
     IconButton(
         modifier = modifier
