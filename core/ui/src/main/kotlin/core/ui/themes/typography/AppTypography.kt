@@ -17,14 +17,14 @@ fun appTypography(dims: AppDimens): Typography = Typography(
         headline0 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
             fontWeight = FontWeight.W400,
-            fontSize = dims.textSizes.textSize32,
-            lineHeight = dims.textSizes.textSize40
+            fontSize = dims.textSizes.textSize24,
+            lineHeight = dims.textSizes.textSize20
         ),
         headline1 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
-            fontWeight = FontWeight.W400,
-            fontSize = dims.textSizes.textSize28,
-            lineHeight = dims.textSizes.textSize36
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize22,
+            lineHeight = dims.textSizes.textSize40
         ),
         headline2 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
@@ -47,14 +47,14 @@ fun appTypography(dims: AppDimens): Typography = Typography(
         title0 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
             fontWeight = FontWeight.W500,
-            fontSize = dims.textSizes.textSize22,
-            lineHeight = dims.textSizes.textSize28,
+            fontSize = dims.textSizes.textSize16,
+            lineHeight = dims.textSizes.textSize20,
         ),
         title1 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
             fontWeight = FontWeight.W400,
             fontSize = dims.textSizes.textSize16,
-            lineHeight = dims.textSizes.textSize24,
+            lineHeight = dims.textSizes.textSize20,
             letterSpacing = dims.textSizes.textSize0_15,
         ),
         title2 = TextStyle(
@@ -92,13 +92,13 @@ fun appTypography(dims: AppDimens): Typography = Typography(
         body0 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
             fontWeight = FontWeight.W500,
-            fontSize = dims.textSizes.textSize16,
-            lineHeight = dims.textSizes.textSize24,
+            fontSize = dims.textSizes.textSize14,
+            lineHeight = dims.textSizes.textSize20,
             letterSpacing = dims.textSizes.textSize0_5
         ),
         body1 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
-            fontWeight = FontWeight.W500,
+            fontWeight = FontWeight.W400,
             fontSize = dims.textSizes.textSize14,
             lineHeight = dims.textSizes.textSize20,
             letterSpacing = dims.textSizes.textSize0_25
@@ -106,8 +106,8 @@ fun appTypography(dims: AppDimens): Typography = Typography(
         body2 = TextStyle(
             fontFamily = AppFontFamilies.Roboto,
             fontWeight = FontWeight.W500,
-            fontSize = dims.textSizes.textSize12,
-            lineHeight = dims.textSizes.textSize16,
+            fontSize = dims.textSizes.textSize14,
+            lineHeight = dims.textSizes.textSize20,
             letterSpacing = dims.textSizes.textSize0_4
         ),
     ),
@@ -117,6 +117,15 @@ fun appTypography(dims: AppDimens): Typography = Typography(
             fontWeight = FontWeight.W500,
             fontSize = dims.textSizes.textSize16,
             lineHeight = dims.textSizes.textSize24,
+            letterSpacing = dims.textSizes.textSize0_15
+        )
+    ),
+    subTitle = SubTitle(
+        subtitle0 = TextStyle(
+            fontFamily = AppFontFamilies.Roboto,
+            fontWeight = FontWeight.W500,
+            fontSize = dims.textSizes.textSize12,
+            lineHeight = dims.textSizes.textSize20,
             letterSpacing = dims.textSizes.textSize0_15
         )
     )

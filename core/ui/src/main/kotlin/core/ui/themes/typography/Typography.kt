@@ -10,7 +10,8 @@ data class Typography(
     val titles : Titles,
     val label : Label,
     val body : Body,
-    val links: Link
+    val links: Link,
+    val subTitle: SubTitle,
 )
 
 data class Display(
@@ -28,6 +29,10 @@ data class Titles(
     val title1 : TextStyle,
     val title2 : TextStyle,
 
+    )
+
+data class SubTitle(
+    val subtitle0 : TextStyle,
     )
 
 data class Label(

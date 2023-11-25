@@ -2,12 +2,15 @@ package pat.project.challengehack.di
 
 import android.content.Context
 import basic.data.repositories.AuthRepository
+import basic.data.repositories.TrackRepository
 import challengeHack.api.AuthApi
+import challengeHack.api.TrackApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import impl.data.repositories.AuthRepositoryImpl
+import impl.data.repositories.TrackRepositoryImpl
 import impl.data.store.AuthorizationStore
 
 
@@ -28,4 +31,14 @@ class DataModule {
             authorizationStore = authorizationStore
         )
     }
+
+    @Provides
+    fun provideTrackRepository(
+        trackApi: TrackApi,
+    ): TrackRepository {
+        return TrackRepositoryImpl(
+            trackApi = trackApi
+        )
+    }
+
 }

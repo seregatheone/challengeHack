@@ -8,13 +8,16 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import core.ui.themes.AppResources
+import pat.project.challengehack.R
 import pat.project.challengehack.navigation.BottomNavBarHeadScreens
 
 @Composable
@@ -56,25 +59,29 @@ fun BottomNavBar(
                     bottomNavBarHeadScreens = BottomNavBarHeadScreens.Main,
                     isItemSelected = BottomNavBarHeadScreens.Main == currentChildScreen,
                     navigate = navigate,
-                    profilePhoto = null
+                    profilePhoto = null,
+                    subTitle = stringResource(id = R.string.main)
                 )
                 BottomNavBarItemComponent(
                     bottomNavBarHeadScreens = BottomNavBarHeadScreens.Friends,
                     isItemSelected = BottomNavBarHeadScreens.Friends == currentChildScreen,
                     navigate = navigate,
-                    profilePhoto = null
+                    profilePhoto = null,
+                    subTitle = stringResource(id = R.string.rooms)
                 )
                 BottomNavBarItemComponent(
                     bottomNavBarHeadScreens = BottomNavBarHeadScreens.Library,
                     isItemSelected = BottomNavBarHeadScreens.Library == currentChildScreen,
                     navigate = navigate,
-                    profilePhoto = null
+                    profilePhoto = null,
+                    subTitle = stringResource(id = R.string.library)
                 )
                 BottomNavBarItemComponent(
                     bottomNavBarHeadScreens = BottomNavBarHeadScreens.Profile,
                     isItemSelected = BottomNavBarHeadScreens.Profile == currentChildScreen,
                     navigate = navigate,
-                    profilePhoto = profilePhoto
+                    profilePhoto = profilePhoto,
+                    subTitle = stringResource(id = R.string.profile)
                 )
 
             }

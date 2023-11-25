@@ -48,12 +48,12 @@ fun ChallengeHackTheme(
     val ourColors: AppColors = appColors(darkTheme)
     val appTypography: Typography = appTypography(dimensions)
 
-//    SideEffect {
-//        systemUiController.setStatusBarColor(
-//            color = ourColors.SystemHeader,
-//            darkIcons = false
-//        )
-//    }
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = ourColors.Black,
+            darkIcons = false
+        )
+    }
 
 
     MaterialTheme(

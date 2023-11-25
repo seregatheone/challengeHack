@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="genre">Жанры</string>
+    <string name="last_rel">Последние релизы</string>
+    <string name="trans">Трансляции</string>
+    </resources>

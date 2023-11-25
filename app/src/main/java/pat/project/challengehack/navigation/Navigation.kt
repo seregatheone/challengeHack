@@ -8,13 +8,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import pat.project.challengehack.navigation.Screens.Companion.ALBUM_ID
+import pat.project.challengehack.navigation.Screens.Companion.ALBUM_ID_DEFAULT
+import pat.project.challengehack.navigation.Screens.Companion.GENRE_NAME
+import pat.project.challengehack.navigation.Screens.Companion.GENRE_NAME_DEFAULT
 import pat.project.challengehack.navigation.utils.navigateAndClean
+import pat.project.challengehack.screens.album.AlbumSreen
 import pat.project.challengehack.screens.authRegLoading.auth.AuthorizationScreen
 import pat.project.challengehack.screens.authRegLoading.featureloading.FeatureLoadingScreen
 import pat.project.challengehack.screens.authRegLoading.registration.RegistrationScreen
 import pat.project.challengehack.screens.authRegLoading.welcomepage.WelcomePageScreen
 import pat.project.challengehack.screens.container.ContainerScreen
 import pat.project.challengehack.screens.friends.friendsScreen.FriendsScreen
+import pat.project.challengehack.screens.genre.GenreScreen
 import pat.project.challengehack.screens.library.LibraryScreen
 import pat.project.challengehack.screens.main.mainScreen.MainScreen
 import pat.project.challengehack.screens.profile.profileScreen.ProfileScreen
@@ -28,9 +34,9 @@ fun Navigation(
     ContainerScreen(
         modifier = Modifier.fillMaxSize(),
         navController = navController,
-    ) {
+    ) { padding ->
         NavHost(
-            modifier = modifier,
+            modifier = Modifier,
             navController = navController,
             startDestination = Screens.FeatureLoading.screenRoute,
         ) {
@@ -95,27 +101,27 @@ fun Navigation(
             ) {
                 composable(route = Screens.Main.screenRoute) {
                     MainScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = padding,
                         navigateToFriendsListWithPopBack = {
                             navController.navigateAndClean(
                                 Screens.Friends.destination()
                             )
                         },
-                        navigateToChat = { chatId ->
-//                        navController.navigate(
-//                            Screens.DirectMessagesScreen.destination(chatId)
-//                        )
+                        navigateToGenre = { genreName ->
+                            navController.navigate(
+                                Screens.Genre.destination(genreName)
+                            )
                         },
-                        navigateToServer = { serverId ->
-//                        navController.navigate(
-//                            Screens.Servers.destination(serverId)
-//                        )
+                        navigateToRelease = { albumId ->
+                        navController.navigate(
+                            Screens.Album.destination(albumId)
+                        )
                         },
                     )
                 }
                 composable(route = Screens.Friends.screenRoute) {
                     FriendsScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = padding,
                         navigateToFriendsRequest = {
 //                        navController.navigateAndClean(
 //                            Screens.FriendsRequest.destination()
@@ -133,14 +139,34 @@ fun Navigation(
                         }
                     )
                 }
+
                 composable(route = Screens.Library.screenRoute) {
                     LibraryScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = padding,
                     )
                 }
+
+                composable(route = Screens.Genre.screenRoute) { backStackEntry ->
+                    val genreName =
+                        backStackEntry.arguments?.getString(GENRE_NAME)?: GENRE_NAME_DEFAULT
+                    GenreScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        genreName = genreName,
+                    )
+                }
+
+                composable(route = Screens.Album.screenRoute) { backStackEntry ->
+                    val albumId =
+                        backStackEntry.arguments?.getString(ALBUM_ID)?.toInt()?: ALBUM_ID_DEFAULT
+                    AlbumSreen(
+                        modifier = Modifier.fillMaxSize(),
+                        albumId = albumId,
+                    )
+                }
+
                 composable(route = Screens.profileScreenRoute) {
                     ProfileScreen(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = padding,
                         navigateToWelcomePageWithPopBackStack = {
                             navController.navigateAndClean(
                                 Screens.WelcomePage.destination()
@@ -252,6 +278,28 @@ sealed class Screens(
             get() = emptyList()
     }
 
+    object Genre : Screens(
+        screenRoute = "$genreScreenRoute/{$GENRE_NAME}",
+    ) {
+        fun destination(genreName: String): String {
+            return "$genreScreenRoute/$genreName"
+        }
+
+        override val arguments: List<NamedNavArgument>
+            get() = emptyList()
+    }
+
+    object Album : Screens(
+        screenRoute = "$albumScreenRoute/{$ALBUM_ID}",
+    ) {
+        fun destination(albumId: Int): String {
+            return "$albumScreenRoute/$albumId"
+        }
+
+        override val arguments: List<NamedNavArgument>
+            get() = emptyList()
+    }
+
     object Profile : Screens(
         screenRoute = profileScreenRoute,
     ) {
@@ -265,10 +313,12 @@ sealed class Screens(
 
     companion object {
         //Arguments
-        const val USER_ID = "userId"
-        const val CHAT_ID = "chatId"
+        const val GENRE_NAME = "genreName"
+        const val ALBUM_ID = "albumId"
         const val SERVER_ID = "serverId"
         const val CHAT_ID_DEFAULT = 0
+        const val ALBUM_ID_DEFAULT = 0
+        const val GENRE_NAME_DEFAULT = ""
         const val USER_ID_DEFAULT = 0
 
 
@@ -285,6 +335,8 @@ sealed class Screens(
         const val mainScreenRoute = "mainScreen"
         const val friendsScreenRoute = "friendsScreen"
         const val libraryScreenRoute = "libraryScreen"
+        const val genreScreenRoute = "genreScreen"
+        const val albumScreenRoute = "albumScreen"
         const val serversScreenRoute = "serversScreen"
         const val friendsRequestScreenRoute = "friendsRequestScreen"
         const val profileScreenRoute = "profileScreen"

@@ -2,6 +2,7 @@ package pat.project.challengehack.di
 
 import backend.utils.manager.TokenManager
 import challengeHack.api.AuthApi
+import challengeHack.api.TrackApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,4 +47,9 @@ class ApiNetworkModule {
     fun provideAuthApi(
         provider: NetworkProvider,
     ): AuthApi = provider.provideRetrofit(AuthApi::class.java)
+
+    @Provides
+    fun provideTrackApi(
+        provider: NetworkProvider,
+    ): TrackApi = provider.provideRetrofit(TrackApi::class.java)
 }
