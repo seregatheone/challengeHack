@@ -9,7 +9,7 @@ interface MainIntercator {
     suspend fun getLastReleases() : Entity<List<RelizeEntity>>
 
     suspend fun getGenres() : Entity<List<GenreEntity>>
-    suspend fun getAlbumMusicById(albumId: Int) : Entity<List<AlbumEntity>>
+    suspend fun getAlbumMusicById(albumId: Int) : Entity<AlbumEntity>
 
 
 }

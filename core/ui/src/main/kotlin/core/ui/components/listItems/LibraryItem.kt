@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import basic.domain.library.models.LibraryEntity
@@ -37,8 +39,10 @@ fun LibraryItem(
     Row(
         modifier = modifier
             .padding(top = 8.dp)
-            .background(color = AppResources.colors.Grey90_60,
-                shape = RoundedCornerShape(8.dp))
+            .background(
+                color = AppResources.colors.Grey90_60,
+                shape = RoundedCornerShape(8.dp)
+            )
             .padding(12.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -82,11 +86,19 @@ fun LibraryItem(
                 )
             }
         }
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Default.DeleteOutline, contentDescription = null,
-                tint = AppResources.colors.White,
-                modifier = Modifier
-                    .size(35.dp))
+        Row {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(imageVector = Icons.Default.DeleteOutline, contentDescription = null,
+                    tint = AppResources.colors.White,
+                    modifier = Modifier
+                        .size(30.dp))
+            }
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(painter = painterResource(id = R.drawable.ic_song_up), contentDescription = null,
+                    tint = AppResources.colors.White,
+                    modifier = Modifier)
+            }
         }
+
     }
 }

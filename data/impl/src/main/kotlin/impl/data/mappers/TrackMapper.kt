@@ -13,6 +13,5 @@ fun TrackDto.asEntity(): TrackEntity {
         pictureUrl = pictureUrl,
         clipUrl = clipUrl,
         duration = duration,
-        published = published,
     )
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import basic.domain.library.models.LibraryEntity
@@ -26,6 +27,7 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import core.ui.themes.AppResources
+import pat.project.challengehack.core.ui.R
 
 @Composable
 fun TrackItem(
@@ -35,7 +37,8 @@ fun TrackItem(
     Row(
         modifier = modifier
             .padding(top = 8.dp)
-            .background(color = AppResources.colors.Grey90_60,
+            .background(
+                color = AppResources.colors.Grey90_60,
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(12.dp)
@@ -82,7 +85,7 @@ fun TrackItem(
             }
         }
         IconButton(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Default.DeleteOutline, contentDescription = null,
+            Icon(painter = painterResource(id = R.drawable.ic_song_up), contentDescription = null,
                 tint = AppResources.colors.White,
                 modifier = Modifier
                     .size(35.dp))

@@ -3,9 +3,12 @@ package pat.project.challengehack.screens.profile.profileScreen.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import core.ui.themes.AppResources
 import pat.project.challengehack.screens.profile.profileScreen.models.CategorySettings
 
 @Composable
@@ -15,12 +18,12 @@ fun CategorySettingsComponent(
     navigateToAccountSettings: () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-//        Text(
-//            modifier = Modifier.padding(bottom = 12.dp),
-//            text = stringResource(id = categorySettings.categoryName),
-//            style = AppResources.typography.titles.title0,
-//            color = AppResources.colors.White
-//        )
+        Text(
+            modifier = Modifier.padding(bottom = 12.dp),
+            text = stringResource(id = categorySettings.categoryName),
+            style = AppResources.typography.titles.title0,
+            color = AppResources.colors.White
+        )
 
         categorySettings.categoryItems.forEach { item ->
             when (item.itemId) {

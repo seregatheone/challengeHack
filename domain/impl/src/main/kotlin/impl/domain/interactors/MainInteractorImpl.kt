@@ -20,7 +20,7 @@ class MainInteractorImpl(
         return mainRepository.getGenres()
     }
 
-    override suspend fun getAlbumMusicById(albumId: Int): Entity<List<AlbumEntity>> {
+    override suspend fun getAlbumMusicById(albumId: Int): Entity<AlbumEntity> {
         return mainRepository.getAlbumMusicById(albumId)
     }
 }

@@ -24,8 +24,13 @@ interface TrackApi {
         @Query("genre") genre: String
     ) : Response<List<TrackDto>>
 
+    @GET("api/v2/genres")
+    suspend fun getGenreInfo(
+        @Query("genre") genre: String
+    ) : Response<GenreDto>
+
     @GET("api/v2/music/album/{albumId}")
     suspend fun getAlbumMusicById(
         @Path("albumId") albumId: Int
-    ) : Response<List<AlbumDto>>
+    ) : Response<AlbumDto>
 }

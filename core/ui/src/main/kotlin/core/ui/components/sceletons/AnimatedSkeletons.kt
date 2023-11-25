@@ -47,7 +47,7 @@ fun AnimatedSkeletons(
     )
 
     val brush = Brush.linearGradient(
-        colors = listOf(Color.Red),
+        colors = listOf(AppResources.colors.Grey60, AppResources.colors.Grey90),
         start = Offset.Zero,
         end = Offset(x = translateAnim.value, y = translateAnim.value)
     )
