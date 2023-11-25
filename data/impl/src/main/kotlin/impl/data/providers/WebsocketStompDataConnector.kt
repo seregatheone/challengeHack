@@ -10,8 +10,8 @@ interface WebsocketStompDataConnector {
     fun initStompWebsocket()
     fun reconnectStompWebsocket()
     fun disconnectStompWebsocket()
-    fun sendMessageInChat(chatId : Int, message : WebsocketMessageSendEntity)
-    fun connectToChatToListening(chatId : Int)
+    fun sendMessageInChat(roomId : Long, message : WebsocketMessageSendEntity)
+    fun connectToChatToListening(roomId : Long)
     fun disconnectFromChat()
 
 }

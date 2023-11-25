@@ -8,13 +8,12 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun String.toLocalDatetime(): LocalDateTime {
-    val dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz")
-    return ZonedDateTime.parse(this, dtf).toLocalDateTime()
+fun Long.toLocalDatetime(): LocalDateTime {
+    return Instant.ofEpochMilli(this).atZone(ZoneId.systemDefault()).toLocalDateTime()
 }
 
 fun LocalDateTime.toSendMessagesDto(): Long {
-    return this.toEpochSecond(ZoneOffset.of("+03:00:00"))*1000
+    return this.toEpochSecond(ZoneOffset.of("+03:00:00")) * 1000
 }
 
 fun LocalDateTime.toFormattedStringWithFullTime(): String {

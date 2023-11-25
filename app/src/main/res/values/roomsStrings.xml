@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="room_text">Комната</string>
+
+    <string name="create_room">Создать</string>
+    <string name="leave_room">Покинуть</string>
+    <string name="finish_room_translation">Завершить</string>
+
+    <string name="invitations_text">Приглашения</string>
+
+    <string name="invites_you_to_the_room_text">приглашает вас в комнату</string>
+    <string name="now_playing_track">Сейчас играет</string>
+
+    <string name="accept_invitation">Принять</string>
+    <string name="decline_invitation">Отклонить</string>
+
+<!--    -->
+    <string name="room_participants">Участники</string>
+    <string name="add_participant">Добавить</string>
+
+    <string name="room_participants_amount">%s/15</string>
+    <string name="i_am_the_leader">Я (лидер)</string>
+
+    <string name="participants_advices">Предложения</string>
+    <string name="participants_queue">Очередь</string>
+
+<!--    -->
+
+    <string name="chat_message_placeholder">Введите сообщение</string>
+
+</resources>

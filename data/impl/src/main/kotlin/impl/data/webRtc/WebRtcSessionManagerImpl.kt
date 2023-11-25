@@ -230,6 +230,7 @@ class WebRtcSessionManagerImpl(
         connectionTracks.forEach {
             peerConnection.connection.removeTrack(it.sender)
         }
+        connectionTracks.clear()
     }
 
     private suspend fun sendOffer() {

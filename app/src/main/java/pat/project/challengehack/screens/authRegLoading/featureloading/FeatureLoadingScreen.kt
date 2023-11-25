@@ -40,7 +40,7 @@ fun FeatureLoadingScreen(
     }
     Box(
         modifier = modifier
-            .background(Color.White)
+            .background(Color.Black)
             .fillMaxSize()
     ) {
         CircularProgressIndicator(
