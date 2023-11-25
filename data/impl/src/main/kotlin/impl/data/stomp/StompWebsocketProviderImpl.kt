@@ -69,9 +69,9 @@ class StompWebsocketProviderImpl(
 
     }
 
-    override fun subscribeOnChat(chatId: Int) {
-        chatTopic = StompClientConfig.getChatListeningUrl(chatId)
-        val topicSubscribe = stompClient.topic(StompClientConfig.getChatListeningUrl(chatId))
+    override fun subscribeOnChat(roomId: Long) {
+        chatTopic = StompClientConfig.getChatListeningUrl(roomId)
+        val topicSubscribe = stompClient.topic(StompClientConfig.getChatListeningUrl(roomId))
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -112,12 +112,12 @@ class StompWebsocketProviderImpl(
 
     }
 
-    override fun sendMessage(chatId: Int, message: WebsocketMessageSendEntity) {
+    override fun sendMessage(roomId: Long, message: WebsocketMessageSendEntity) {
         val chatSocketMessage = message.toEntity()
 
         sendCompletable(
             stompClient.send(
-                StompClientConfig.getChatSendingUrl(chatId),
+                StompClientConfig.getChatSendingUrl(roomId),
                 gson.toJson(chatSocketMessage)
             )
         )

@@ -4,20 +4,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import pat.project.challengehack.navigation.Screens.Companion.MY_DEFAULT_ID
+import pat.project.challengehack.navigation.Screens.Companion.MY_ID
+import pat.project.challengehack.navigation.Screens.Companion.ROOM_DEFAULT_ID
+import pat.project.challengehack.navigation.Screens.Companion.ROOM_ID
 import pat.project.challengehack.navigation.utils.navigateAndClean
 import pat.project.challengehack.screens.authRegLoading.auth.AuthorizationScreen
 import pat.project.challengehack.screens.authRegLoading.featureloading.FeatureLoadingScreen
 import pat.project.challengehack.screens.authRegLoading.registration.RegistrationScreen
 import pat.project.challengehack.screens.authRegLoading.welcomepage.WelcomePageScreen
+import pat.project.challengehack.screens.chats.groupChat.GroupChatScreen
 import pat.project.challengehack.screens.container.ContainerScreen
-import pat.project.challengehack.screens.friends.friendsScreen.FriendsScreen
 import pat.project.challengehack.screens.library.LibraryScreen
 import pat.project.challengehack.screens.main.mainScreen.MainScreen
 import pat.project.challengehack.screens.profile.profileScreen.ProfileScreen
+import pat.project.challengehack.screens.rooms.roomScreen.RoomScreen
+import pat.project.challengehack.screens.rooms.roomsScreenStart.RoomsStartScreen
 
 
 @Composable
@@ -114,23 +123,9 @@ fun Navigation(
                     )
                 }
                 composable(route = Screens.Friends.screenRoute) {
-                    FriendsScreen(
+                    RoomsStartScreen(
                         modifier = Modifier.fillMaxSize(),
-                        navigateToFriendsRequest = {
-//                        navController.navigateAndClean(
-//                            Screens.FriendsRequest.destination()
-//                        )
-                        },
-                        navigateToCall = { userId ->
-//                        navController.navigate(
-//                            Screens.Call.destination(userId)
-//                        )
-                        },
-                        navigateToChat = { chatId ->
-//                        navController.navigate(
-//                            Screens.DirectMessagesScreen.destination(chatId)
-//                        )
-                        }
+                        navigateToRoomScreen = {}
                     )
                 }
                 composable(route = Screens.Library.screenRoute) {
@@ -154,6 +149,49 @@ fun Navigation(
                     )
                 }
             }
+
+            composable(
+                route = Screens.RoomScreen.screenRoute,
+                deepLinks = listOf(navDeepLink {
+                    uriPattern = "http://300notes/room/join/{$ROOM_ID}"
+                })
+            ) { backStackEntry ->
+                val roomId = backStackEntry.arguments?.getString(ROOM_ID)?.toLong() ?: ROOM_DEFAULT_ID
+
+                RoomScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    roomId = roomId,
+                    onClickBack = {
+                        navController.popBackStack()
+                    },
+                    navigateToChat = { mineId : Long ->
+                        navController.navigate(
+                            Screens.GroupChat.destination(
+                                mineId = mineId,
+                                chat = roomId
+                            )
+                        )
+                    }
+                )
+            }
+
+            composable(
+                route = Screens.GroupChat.screenRoute
+            ) { backStackEntry ->
+                val mineId = backStackEntry.arguments?.getString(MY_ID)?.toLong() ?: MY_DEFAULT_ID
+                val roomId = backStackEntry.arguments?.getString(ROOM_ID)?.toLong() ?: ROOM_DEFAULT_ID
+
+                GroupChatScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    myId = mineId,
+                    roomId = roomId,
+                    onBackPressed = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+
 
 
         }
@@ -241,6 +279,41 @@ sealed class Screens(
             get() = emptyList()
     }
 
+    object RoomScreen : Screens(
+        screenRoute = "$roomScreenRoute/{$ROOM_ID}"
+    ) {
+        fun destination(roomId: String): String {
+            return "$roomScreenRoute/$roomId"
+        }
+
+        override val arguments: List<NamedNavArgument>
+            get() = listOf(
+                navArgument(ROOM_ID) {
+                    type = NavType.StringType
+                }
+            )
+
+    }
+
+    object GroupChat : Screens(
+        screenRoute = "$groupChatScreenRoute/{$MY_ID}/{$ROOM_ID}"
+    ) {
+        fun destination(mineId: Long, chat : Long): String {
+            return "$roomScreenRoute/$mineId/$chat"
+        }
+
+        override val arguments: List<NamedNavArgument>
+            get() = listOf(
+                navArgument(MY_ID) {
+                    type = NavType.StringType
+                },
+                navArgument(ROOM_ID) {
+                    type = NavType.StringType
+                }
+            )
+
+    }
+
     object Library : Screens(
         screenRoute = libraryScreenRoute,
     ) {
@@ -265,11 +338,15 @@ sealed class Screens(
 
     companion object {
         //Arguments
-        const val USER_ID = "userId"
-        const val CHAT_ID = "chatId"
+        const val MY_ID = "myId"
+        const val MY_DEFAULT_ID = 0L
+
         const val SERVER_ID = "serverId"
         const val CHAT_ID_DEFAULT = 0
         const val USER_ID_DEFAULT = 0
+
+        const val ROOM_ID = "roomId"
+        const val ROOM_DEFAULT_ID = 0L
 
 
         const val REDIRECTION_STATUS = "RedirectionStatus"
@@ -285,8 +362,9 @@ sealed class Screens(
         const val mainScreenRoute = "mainScreen"
         const val friendsScreenRoute = "friendsScreen"
         const val libraryScreenRoute = "libraryScreen"
+        const val groupChatScreenRoute = "groupChatScreenRoute"
         const val serversScreenRoute = "serversScreen"
-        const val friendsRequestScreenRoute = "friendsRequestScreen"
+        const val roomScreenRoute = "roomScreen"
         const val profileScreenRoute = "profileScreen"
         const val accountSettingsRoute = "accountPage"
         const val passwordScreen = "passwordScreen"

@@ -135,7 +135,7 @@ class MainActivity : ComponentActivity() {
 
             ChallengeHackTheme {
                 WindowCompat.setDecorFitsSystemWindows(window, false)
-                window.statusBarColor = Color.White.toArgb()
+                window.statusBarColor = Color.Black.toArgb()
 
                 Box(Modifier.fillMaxSize()) {
 
@@ -188,6 +188,12 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindService(connection)
+        mBound = false
     }
 }
 

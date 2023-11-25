@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.VolumeOff
 import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -32,6 +33,7 @@ enum class IconButtonStyles(
     MICOFF(Icons.Default.MicOff),
     MIC(Icons.Default.Mic),
     VOLUME(Icons.Default.VolumeUp),
+    VOLUMEOFF(Icons.Default.VolumeOff),
     MESSAGE(Icons.Default.Message),
     MENU(Icons.Default.Menu),
     ADD(Icons.Default.Add),

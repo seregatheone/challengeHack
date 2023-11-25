@@ -2,12 +2,18 @@ package pat.project.challengehack.di
 
 import android.content.Context
 import basic.data.repositories.AuthRepository
+import basic.data.repositories.ProfileRepository
+import basic.data.repositories.RoomRepository
 import challengeHack.api.AuthApi
+import challengeHack.api.ProfileApi
+import challengeHack.api.RoomApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import impl.data.repositories.AuthRepositoryImpl
+import impl.data.repositories.ProfileRepositoryImpl
+import impl.data.repositories.RoomRepositoryImpl
 import impl.data.store.AuthorizationStore
 
 
@@ -26,6 +32,24 @@ class DataModule {
         return AuthRepositoryImpl(
             authApi = authApi,
             authorizationStore = authorizationStore
+        )
+    }
+
+    @Provides
+    fun provideRoomRepository(
+        roomApi: RoomApi
+    ): RoomRepository {
+        return RoomRepositoryImpl(
+            roomApi = roomApi
+        )
+    }
+
+    @Provides
+    fun provideProfileRepository(
+        profileApi: ProfileApi
+    ): ProfileRepository {
+        return ProfileRepositoryImpl(
+            profileApi = profileApi
         )
     }
 }

@@ -8,8 +8,8 @@ interface StompWebsocketProvider {
     val messageFlow: SharedFlow<WebsocketMessageReceivedEntity>
     fun connect()
     fun reconnect()
-    fun subscribeOnChat(chatId : Int)
+    fun subscribeOnChat(roomId : Long)
     fun disconnectFromChat()
-    fun sendMessage(chatId : Int, message: WebsocketMessageSendEntity)
+    fun sendMessage(roomId : Long, message: WebsocketMessageSendEntity)
     fun disconnect()
 }

@@ -85,12 +85,12 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
         stompWebsocketProvider.disconnect()
     }
 
-    override fun sendMessageInChat(chatId: Int, message: WebsocketMessageSendEntity) {
-        stompWebsocketProvider.sendMessage(chatId, message)
+    override fun sendMessageInChat(roomId: Long, message: WebsocketMessageSendEntity) {
+        stompWebsocketProvider.sendMessage(roomId, message)
     }
 
-    override fun connectToChatToListening(chatId: Int) {
-        stompWebsocketProvider.subscribeOnChat(chatId)
+    override fun connectToChatToListening(roomId: Long) {
+        stompWebsocketProvider.subscribeOnChat(roomId)
     }
 
     override fun disconnectFromChat() {
