@@ -27,7 +27,6 @@ import pat.project.challengehack.screens.authRegLoading.registration.Registratio
 import pat.project.challengehack.screens.authRegLoading.welcomepage.WelcomePageScreen
 import pat.project.challengehack.screens.chats.groupChat.GroupChatScreen
 import pat.project.challengehack.screens.container.ContainerScreen
-import pat.project.challengehack.screens.friends.friendsScreen.FriendsScreen
 import pat.project.challengehack.screens.genre.GenreScreen
 import pat.project.challengehack.screens.library.LibraryScreen
 import pat.project.challengehack.screens.main.mainScreen.MainScreen
@@ -129,12 +128,7 @@ fun Navigation(
                         },
                     )
                 }
-                composable(route = Screens.Friends.screenRoute) {
-                    RoomsStartScreen(
-                        modifier = Modifier.fillMaxSize(),
-                        navigateToRoomScreen = {}
-                    )
-                }
+
 
                 composable(route = Screens.Library.screenRoute) {
                     LibraryScreen(
@@ -175,6 +169,19 @@ fun Navigation(
                         }
                     )
                 }
+            }
+
+            composable(route = Screens.Friends.screenRoute) {
+                RoomsStartScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    navigateToRoomScreen = {roomId ->
+                        navController.navigate(
+                            Screens.RoomScreen.destination(
+                                roomId
+                            )
+                        )
+                    }
+                )
             }
 
             composable(
@@ -309,7 +316,7 @@ sealed class Screens(
     object RoomScreen : Screens(
         screenRoute = "$roomScreenRoute/{$ROOM_ID}"
     ) {
-        fun destination(roomId: String): String {
+        fun destination(roomId: Long): String {
             return "$roomScreenRoute/$roomId"
         }
 

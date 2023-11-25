@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +25,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,19 +41,29 @@ import core.ui.themes.AppResources
 import pat.project.challengehack.MainActivity
 import pat.project.challengehack.R
 import pat.project.challengehack.screens.rooms.roomsScreenStart.components.InvitationComponent
-import utils.files.FilesUtil
+import pat.project.challengehack.screens.rooms.roomsScreenStart.models.RoomsNavDirections
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RoomsStartScreen(
     modifier: Modifier = Modifier,
     viewModel: RoomsStartScreenViewModel = hiltViewModel(),
-    navigateToRoomScreen: () -> Unit
+    navigateToRoomScreen: (Long) -> Unit
 ) {
 
     val context = LocalContext.current
 
     val roomUiState by viewModel.roomUiState.collectAsState()
+    val roomsNavDirections by viewModel.roomsNavDirections.collectAsState()
+
+    LaunchedEffect(key1 = roomsNavDirections) {
+        when (roomsNavDirections) {
+            RoomsNavDirections.Default -> {}
+            is RoomsNavDirections.RoomScreen -> {
+                navigateToRoomScreen((roomsNavDirections as RoomsNavDirections.RoomScreen).roomId)
+            }
+        }
+    }
 
     val launchCameraPermission = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -123,7 +132,9 @@ fun RoomsStartScreen(
                             .width(148.dp)
                             .height(40.dp),
                         cornersRadius = 8.dp,
-                        onClick = {},
+                        onClick = {
+                            viewModel.createRoom()
+                        },
                         text = stringResource(id = R.string.create_room)
                     )
                 }

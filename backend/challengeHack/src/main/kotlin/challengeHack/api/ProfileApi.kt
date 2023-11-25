@@ -6,5 +6,7 @@ import retrofit2.http.GET
 
 interface ProfileApi {
     @GET("api/v2/user")
-    fun getProfileInfo() : Response<ProfileInfoDto>
+    suspend fun getProfileInfo() : Response<ProfileInfoDto>
+
+
 }

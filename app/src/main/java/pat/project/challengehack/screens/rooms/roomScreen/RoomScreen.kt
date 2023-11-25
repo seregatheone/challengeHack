@@ -53,7 +53,11 @@ fun RoomScreen(
     val roomUiState by viewModel.roomUiState.collectAsState()
     val callUiState by viewModel.callUiState.collectAsState()
 
-    val webRtcSession = LocalSessionManager.current
+    val sessionManager = LocalSessionManager.current
+
+    LaunchedEffect(key1 = Unit) {
+        sessionManager.onSessionScreenReady()
+    }
 
     val tabsList by remember {
         mutableStateOf(
@@ -79,6 +83,7 @@ fun RoomScreen(
                     .fillMaxWidth()
                     .background(color = AppResources.colors.Black)
                     .padding(top = 12.dp, bottom = 20.dp)
+                    .padding(horizontal = 22.dp)
             ) {
 
                 Icon(
@@ -87,6 +92,9 @@ fun RoomScreen(
                     tint = AppResources.colors.White,
                     modifier = Modifier
                         .align(Alignment.CenterStart)
+                        .clickable {
+                            onClickBack()
+                        }
                 )
 
                 Icon(
@@ -106,17 +114,20 @@ fun RoomScreen(
                 },
                 isMicroOn = callUiState.isMicroOn,
                 toggleMicro = {
-                    webRtcSession.enableMicrophone(
+                    sessionManager.enableMicrophone(
                         callUiState.isMicroOn
                     )
                     viewModel.toggleMicro()
                 },
                 isVolumeOn = callUiState.isVolumeOn,
                 toggleVolume = {
+                    sessionManager.enableVolume(
+                        callUiState.isVolumeOn
+                    )
                     viewModel.toggleVolume()
                 },
                 onFinishAndLeave = {
-                    webRtcSession.disconnect()
+                    sessionManager.disconnect()
                     onClickBack()
                 },
             )
@@ -146,13 +157,14 @@ fun RoomScreen(
 //                    )
 //                }
             }
-            if (roomUiState.roomParticipantsFullDataEntity.isNotEmpty()) {
-                LazyRow(modifier = Modifier.padding(top = 8.dp)) {
-                    item {
-                        AddParticipantIcon {
 
-                        }
+            LazyRow(modifier = Modifier.padding(top = 8.dp)) {
+                item {
+                    AddParticipantIcon {
+
                     }
+                }
+                if (roomUiState.roomParticipantsFullDataEntity.isNotEmpty()) {
                     items(roomUiState.roomParticipantsFullDataEntity) { fullDescription ->
                         ParticipantImageAndName(
                             isOwner = roomUiState.roomDataEntity?.ownerId == fullDescription.userId,
