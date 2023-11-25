@@ -4,9 +4,11 @@ import android.content.Context
 import basic.data.repositories.AuthRepository
 import basic.data.repositories.ProfileRepository
 import basic.data.repositories.RoomRepository
+import basic.data.repositories.TrackRepository
 import challengeHack.api.AuthApi
 import challengeHack.api.ProfileApi
 import challengeHack.api.RoomApi
+import challengeHack.api.TrackApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +16,7 @@ import dagger.hilt.components.SingletonComponent
 import impl.data.repositories.AuthRepositoryImpl
 import impl.data.repositories.ProfileRepositoryImpl
 import impl.data.repositories.RoomRepositoryImpl
+import impl.data.repositories.TrackRepositoryImpl
 import impl.data.store.AuthorizationStore
 
 
@@ -52,4 +55,14 @@ class DataModule {
             profileApi = profileApi
         )
     }
+
+    @Provides
+    fun provideTrackRepository(
+        trackApi: TrackApi,
+    ): TrackRepository {
+        return TrackRepositoryImpl(
+            trackApi = trackApi
+        )
+    }
+
 }
