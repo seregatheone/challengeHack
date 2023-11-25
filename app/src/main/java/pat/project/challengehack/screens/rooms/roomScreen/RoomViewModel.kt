@@ -60,7 +60,7 @@ class RoomViewModel @Inject constructor(
     }
 
     fun loadRoom(roomId : Long){
-
+        
     }
 
 }

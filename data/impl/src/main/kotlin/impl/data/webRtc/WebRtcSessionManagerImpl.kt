@@ -49,12 +49,12 @@ class WebRtcSessionManagerImpl(
     private val sessionManagerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     // used to send local video track to the fragment
-    private val _localVideoTrackFlow = MutableSharedFlow<VideoTrack>()
-    override val localVideoTrackFlow: SharedFlow<VideoTrack> = _localVideoTrackFlow
+//    private val _localVideoTrackFlow = MutableSharedFlow<VideoTrack>()
+//    override val localVideoTrackFlow: SharedFlow<VideoTrack> = _localVideoTrackFlow
 
     // used to send remote video track to the sender
-    private val _remoteVideoTrackFlow = MutableSharedFlow<VideoTrack>()
-    override val remoteVideoTrackFlow: SharedFlow<VideoTrack> = _remoteVideoTrackFlow
+//    private val _remoteVideoTrackFlow = MutableSharedFlow<VideoTrack>()
+//    override val remoteVideoTrackFlow: SharedFlow<VideoTrack> = _remoteVideoTrackFlow
 
     // declaring video constraints and setting OfferToReceiveVideo to true
     // this step is mandatory to create valid offer and answer
@@ -101,12 +101,12 @@ class WebRtcSessionManagerImpl(
         }
     }
 
-    private val localVideoTrack: VideoTrack by lazy {
-        peerConnectionFactory.makeVideoTrack(
-            source = videoSource,
-            trackId = "Video${UUID.randomUUID()}"
-        )
-    }
+//    private val localVideoTrack: VideoTrack by lazy {
+//        peerConnectionFactory.makeVideoTrack(
+//            source = videoSource,
+//            trackId = "Video${UUID.randomUUID()}"
+//        )
+//    }
 
     /** Audio properties */
     private val audioManager by lazy {
@@ -143,14 +143,14 @@ class WebRtcSessionManagerImpl(
                 )
             },
             onVideoTrack = { rtpTransceiver ->
-                val track = rtpTransceiver?.receiver?.track() ?: return@makePeerConnection
-                connectionTracks.add(rtpTransceiver)
-                if (track.kind() == MediaStreamTrack.VIDEO_TRACK_KIND) {
-                    val videoTrack = track as VideoTrack
-                    sessionManagerScope.launch {
-                        _remoteVideoTrackFlow.emit(videoTrack)
-                    }
-                }
+//                val track = rtpTransceiver?.receiver?.track() ?: return@makePeerConnection
+//                connectionTracks.add(rtpTransceiver)
+//                if (track.kind() == MediaStreamTrack.VIDEO_TRACK_KIND) {
+//                    val videoTrack = track as VideoTrack
+//                    sessionManagerScope.launch {
+//                        _remoteVideoTrackFlow.emit(videoTrack)
+//                    }
+//                }
             }
         )
     }
@@ -171,14 +171,14 @@ class WebRtcSessionManagerImpl(
     override fun onSessionScreenReady() {
         setupAudio()
         if(!added){
-            peerConnection.connection.addTrack(localVideoTrack)
+//            peerConnection.connection.addTrack(localVideoTrack)
             peerConnection.connection.addTrack(localAudioTrack)
             added = true
         }
 
         sessionManagerScope.launch {
 //             sending local video track to show local video from start
-            _localVideoTrackFlow.emit(localVideoTrack)
+//            _localVideoTrackFlow.emit(localVideoTrack)
 
             if (offer != null) {
                 sendAnswer()
@@ -196,6 +196,10 @@ class WebRtcSessionManagerImpl(
         audioManager?.isMicrophoneMute = !enabled
     }
 
+    override fun enableVolume(enabled: Boolean) {
+        localAudioTrack.setEnabled(enabled)
+    }
+
     override fun enableCamera(enabled: Boolean) {
         if (enabled) {
             videoCapturer.startCapture(resolution.width, resolution.height, 30)
@@ -206,12 +210,12 @@ class WebRtcSessionManagerImpl(
 
     override fun disconnect() {
         // dispose audio & video tracks.
-        remoteVideoTrackFlow.replayCache.forEach { videoTrack ->
-            videoTrack.dispose()
-        }
-        localVideoTrackFlow.replayCache.forEach { videoTrack ->
-            videoTrack.dispose()
-        }
+//        remoteVideoTrackFlow.replayCache.forEach { videoTrack ->
+//            videoTrack.dispose()
+//        }
+//        localVideoTrackFlow.replayCache.forEach { videoTrack ->
+//            videoTrack.dispose()
+//        }
 //        localAudioTrack.dispose()
 //        localVideoTrack.dispose()
 

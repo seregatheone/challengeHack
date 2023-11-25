@@ -128,12 +128,7 @@ fun Navigation(
                         },
                     )
                 }
-                composable(route = Screens.Friends.screenRoute) {
-                    RoomsStartScreen(
-                        modifier = Modifier.fillMaxSize(),
-                        navigateToRoomScreen = {}
-                    )
-                }
+
 
                 composable(route = Screens.Library.screenRoute) {
                     LibraryScreen(
@@ -180,6 +175,19 @@ fun Navigation(
                         }
                     )
                 }
+            }
+
+            composable(route = Screens.Friends.screenRoute) {
+                RoomsStartScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    navigateToRoomScreen = {roomId ->
+                        navController.navigate(
+                            Screens.RoomScreen.destination(
+                                roomId
+                            )
+                        )
+                    }
+                )
             }
 
             composable(
@@ -314,7 +322,7 @@ sealed class Screens(
     object RoomScreen : Screens(
         screenRoute = "$roomScreenRoute/{$ROOM_ID}"
     ) {
-        fun destination(roomId: String): String {
+        fun destination(roomId: Long): String {
             return "$roomScreenRoute/$roomId"
         }
 

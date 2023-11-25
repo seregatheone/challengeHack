@@ -46,7 +46,7 @@ fun RoomBottomBar(
         CustomIconButton(
             iconButtonStyle = if(isVolumeOn) IconButtonStyles.VOLUME else IconButtonStyles.VOLUMEOFF,
             onCLick = toggleVolume,
-            color = if (isMicroOn) AppResources.colors.Grey90 else AppResources.colors.Grey70,
+            color = if (isVolumeOn) AppResources.colors.Grey90 else AppResources.colors.Grey70,
             modifier = Modifier,
             tint = AppResources.colors.White
         )
