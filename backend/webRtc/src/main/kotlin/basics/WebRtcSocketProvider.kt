@@ -9,7 +9,7 @@ interface WebRtcSocketProvider {
     val sessionStateFlow: StateFlow<WebRTCSessionState>
     val signalingCommandFlow: SharedFlow<Pair<SignalingCommand, String>>
 
-    fun connectWebRtc(conversationId: String)
+    fun connectWebRtc(roomId: Long)
     fun sendCommand(signalingCommand: SignalingCommand, message: String)
     fun disconnectWebRtc()
     fun dispose()

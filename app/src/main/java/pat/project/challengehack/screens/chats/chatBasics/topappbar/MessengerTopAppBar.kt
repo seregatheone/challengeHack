@@ -33,6 +33,7 @@ fun MessengerTopAppBar(
             .fillMaxWidth()
             .background(color = AppResources.colors.Black)
             .padding(top = 12.dp, bottom = 20.dp)
+            .padding(horizontal = 22.dp)
     ) {
 
         Icon(

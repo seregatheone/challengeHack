@@ -98,8 +98,8 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     }
 
     ////////////////   WebRtc
-    override fun connectToWebRtc(conversationId : String) {
-        stompWebRtcProvider.connectWebRtc(conversationId)
+    override fun connectToWebRtc(roomId: Long) {
+        stompWebRtcProvider.connectWebRtc(roomId)
         serviceScope.launch {
             sessionManager.signalingClient.sessionStateFlow.collectLatest {sessionState ->
                 Log.i("sessionState", sessionState.name)
