@@ -14,5 +14,5 @@ data class AlbumDto(
     @SerializedName("bandName")
     val bandName : String,
     @SerializedName("published")
-    val published : Int,
+    val published : Long,
 )

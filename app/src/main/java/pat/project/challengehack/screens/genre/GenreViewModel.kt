@@ -42,4 +42,26 @@ class GenreViewModel @Inject constructor(
         }
     }
 
+    fun getGenreInfo(genreName: String) {
+        viewModelScope.launch {
+            when (val response = genreInteractor.getGenreInfo(genreName)) {
+                is Entity.Success -> {
+                    _genreUIState.update { genreUiState ->
+                        genreUiState.copy(
+                            genreInfo = response.data
+                        )
+                    }
+                }
+
+                is Entity.Error -> {
+
+                }
+
+                else -> {
+
+                }
+            }
+        }
+    }
+
 }

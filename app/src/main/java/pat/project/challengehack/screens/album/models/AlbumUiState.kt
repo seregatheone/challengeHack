@@ -4,5 +4,5 @@ import basic.domain.main.models.AlbumEntity
 import basic.domain.main.models.GenreEntity
 
 data class AlbumUiState (
-    val soundList: List<AlbumEntity> = emptyList(),
+    val albumInfo: AlbumEntity? = null,
 )

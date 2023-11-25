@@ -27,7 +27,6 @@ import pat.project.challengehack.screens.authRegLoading.registration.Registratio
 import pat.project.challengehack.screens.authRegLoading.welcomepage.WelcomePageScreen
 import pat.project.challengehack.screens.chats.groupChat.GroupChatScreen
 import pat.project.challengehack.screens.container.ContainerScreen
-import pat.project.challengehack.screens.friends.friendsScreen.FriendsScreen
 import pat.project.challengehack.screens.genre.GenreScreen
 import pat.project.challengehack.screens.library.LibraryScreen
 import pat.project.challengehack.screens.main.mainScreen.MainScreen

@@ -6,5 +6,5 @@ data class AlbumEntity(
     val pictureUrl : String,
     val bandId : Int,
     val bandName : String,
-    val published : Int,
+    val published : Long,
 )

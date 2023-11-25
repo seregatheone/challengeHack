@@ -26,7 +26,7 @@ class AlbumViewModel @Inject constructor(
                 is Entity.Success -> {
                     _albumUIState.update { albumUiState ->
                         albumUiState.copy(
-                            soundList = response.data
+                            albumInfo = response.data
                         )
                     }
                 }

@@ -51,6 +51,7 @@ fun GenreScreen(
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.getGenreMusicByName(genreName)
+        viewModel.getGenreInfo(genreName)
     }
 
     val genreUiState by viewModel.genreUiState.collectAsState()
@@ -88,33 +89,34 @@ fun GenreScreen(
                 .fillMaxHeight()
                 .background(color = AppResources.colors.Black)
                 .padding(top = 22.dp, start = 22.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            AsyncImage(
-//                modifier = modifier
-//                    .padding(bottom = 4.dp)
-//                    .background(
-//                        color = AppResources.colors.Grey60,
-//                        shape = RoundedCornerShape(4.dp)
-//                    )
-//                    .size(130.dp),
-//                contentScale = ContentScale.Crop,
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(genreUiState.pictureUrl)
-//                    .decoderFactory(SvgDecoder.Factory())
-//                    .memoryCachePolicy(policy = CachePolicy.ENABLED)
-//                    .diskCachePolicy(CachePolicy.ENABLED)
-//                    .build(),
-//                contentDescription = null
-//            )
+            AsyncImage(
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .background(
+                        color = AppResources.colors.Grey60,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .size(170.dp),
+                contentScale = ContentScale.Crop,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(genreUiState.genreInfo?.pictureUrl)
+                    .decoderFactory(SvgDecoder.Factory())
+                    .memoryCachePolicy(policy = CachePolicy.ENABLED)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .build(),
+                contentDescription = null
+            )
             LazyColumn(
                 modifier = Modifier
+                    .padding(top = 22.dp)
                     .fillMaxHeight()
             ) {
                 items(genreUiState.soundList) { item ->
                     TrackItem(item = item, modifier = Modifier)
                 }
             }
-            Text(text = genreName)
         }
     }
 }

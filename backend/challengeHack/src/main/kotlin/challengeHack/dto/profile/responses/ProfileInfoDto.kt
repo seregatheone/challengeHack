@@ -11,4 +11,6 @@ data class ProfileInfoDto (
     val profilePictureUrl : String,
     @SerializedName("email")
     val email : String,
+    @SerializedName("gender")
+    val gender : String,
 )

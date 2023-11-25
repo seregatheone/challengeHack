@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -21,9 +24,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.decode.SvgDecoder
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import core.ui.components.listItems.TrackItem
 import core.ui.themes.AppResources
 import pat.project.challengehack.R
 
@@ -33,7 +43,7 @@ fun AlbumSreen(
     viewModel: AlbumViewModel = hiltViewModel(),
     albumId: Int,
     onclickBack: () -> Unit
-){
+) {
     LaunchedEffect(key1 = Unit) {
         viewModel.getAlbumMusicById(albumId)
     }
@@ -71,24 +81,25 @@ fun AlbumSreen(
                 .fillMaxHeight()
                 .background(color = AppResources.colors.Black)
                 .padding(top = 22.dp, start = 22.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            AsyncImage(
-//                modifier = modifier
-//                    .padding(bottom = 4.dp)
-//                    .background(
-//                        color = AppResources.colors.Grey60,
-//                        shape = RoundedCornerShape(4.dp)
-//                    )
-//                    .size(130.dp),
-//                contentScale = ContentScale.Crop,
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(genreUiState.pictureUrl)
-//                    .decoderFactory(SvgDecoder.Factory())
-//                    .memoryCachePolicy(policy = CachePolicy.ENABLED)
-//                    .diskCachePolicy(CachePolicy.ENABLED)
-//                    .build(),
-//                contentDescription = null
-//            )
+            AsyncImage(
+                modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .background(
+                        color = AppResources.colors.Grey60,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .size(170.dp),
+                contentScale = ContentScale.Crop,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(albumUiState.albumInfo?.pictureUrl)
+                    .decoderFactory(SvgDecoder.Factory())
+                    .memoryCachePolicy(policy = CachePolicy.ENABLED)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .build(),
+                contentDescription = null
+            )
 //            LazyColumn(
 //                modifier = Modifier
 //                    .fillMaxHeight()
@@ -97,7 +108,8 @@ fun AlbumSreen(
 //                    TrackItem(item = item, modifier = Modifier)
 //                }
 //            }
-            Text(text = albumId.toString(), color = Color.White)
+            albumUiState.albumInfo?.let { Text(text = it.name, color = Color.White, style = AppResources.typography.subTitle.subtitle0) }
+            albumUiState.albumInfo?.let { Text(text = it.bandName, color = Color.White, style = AppResources.typography.subTitle.subtitle0) }
         }
     }
 }
