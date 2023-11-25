@@ -2,13 +2,12 @@ package pat.project.challengehack.screens.main.mainScreen.models
 
 sealed class MainNavDirections {
     object Default : MainNavDirections()
-    object FriendList : MainNavDirections()
-    class Chat(
-        val chatId : Int
+    class Genre(
+        val genreName : String
     ) : MainNavDirections()
 
-    class Server(
-        val serverId : Int
+    class Release(
+        val albumId : Int
     ) : MainNavDirections()
 
 }

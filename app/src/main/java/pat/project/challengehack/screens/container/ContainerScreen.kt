@@ -65,7 +65,6 @@ fun ContainerScreen(
     Scaffold(
         modifier = Modifier.systemBarsPadding(),
         bottomBar = {
-
             BottomNavBar(
                 modifier = Modifier.fillMaxWidth(),
                 navigate = { destination ->

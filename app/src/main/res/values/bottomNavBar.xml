@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main">Главная</string>
+    <string name="rooms">Комнаты</string>
+    <string name="library">Библиотека</string>
+    <string name="profile">Профиль</string>
+</resources>
