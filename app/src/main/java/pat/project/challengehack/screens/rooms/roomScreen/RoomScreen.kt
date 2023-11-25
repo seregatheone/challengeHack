@@ -1,6 +1,10 @@
 package pat.project.challengehack.screens.rooms.roomScreen
 
+import android.Manifest
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import core.ui.themes.AppResources
 import pat.project.challengehack.LocalSessionManager
+import pat.project.challengehack.LocalWebRtcDataConnector
 import pat.project.challengehack.R
 import pat.project.challengehack.screens.rooms.roomScreen.components.AddParticipantIcon
 import pat.project.challengehack.screens.rooms.roomScreen.components.ParticipantImageAndName
@@ -53,10 +59,33 @@ fun RoomScreen(
     val roomUiState by viewModel.roomUiState.collectAsState()
     val callUiState by viewModel.callUiState.collectAsState()
 
+
+    val webRtcConnection = LocalWebRtcDataConnector.current
+    LaunchedEffect(key1 = Unit){
+        webRtcConnection.connectToWebRtc(roomId)
+    }
+
     val sessionManager = LocalSessionManager.current
 
     LaunchedEffect(key1 = Unit) {
         sessionManager.onSessionScreenReady()
+    }
+    val context = LocalContext.current
+
+    val launchMicroPermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+//            sessionManager.onSessionScreenReady()
+        } else {
+            Toast.makeText(context, "Необходим доступ к микрофону", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        launchMicroPermission.launch(
+            Manifest.permission.RECORD_AUDIO
+        )
     }
 
     val tabsList by remember {

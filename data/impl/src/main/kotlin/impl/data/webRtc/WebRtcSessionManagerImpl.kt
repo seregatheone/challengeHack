@@ -62,13 +62,13 @@ class WebRtcSessionManagerImpl(
         mandatory.addAll(
             listOf(
                 MediaConstraints.KeyValuePair("OfferToReceiveAudio", "true"),
-                MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"),
+//                MediaConstraints.KeyValuePair("OfferToReceiveVideo", "true"),
             )
         )
     }
 
     // getting front camera
-    private val videoCapturer: VideoCapturer by lazy { buildCameraCapturer() }
+//    private val videoCapturer: VideoCapturer by lazy { buildCameraCapturer() }
     private val cameraManager by lazy { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
     private val cameraEnumerator: Camera2Enumerator by lazy {
         Camera2Enumerator(context)
@@ -94,12 +94,12 @@ class WebRtcSessionManagerImpl(
         peerConnectionFactory.eglBaseContext
     )
 
-    private val videoSource by lazy {
-        peerConnectionFactory.makeVideoSource(videoCapturer.isScreencast).apply {
-            videoCapturer.initialize(surfaceTextureHelper, context, this.capturerObserver)
-            videoCapturer.startCapture(resolution.width, resolution.height, 30)
-        }
-    }
+//    private val videoSource by lazy {
+//        peerConnectionFactory.makeVideoSource(videoCapturer.isScreencast).apply {
+//            videoCapturer.initialize(surfaceTextureHelper, context, this.capturerObserver)
+//            videoCapturer.startCapture(resolution.width, resolution.height, 30)
+//        }
+//    }
 
 //    private val localVideoTrack: VideoTrack by lazy {
 //        peerConnectionFactory.makeVideoTrack(
@@ -188,9 +188,9 @@ class WebRtcSessionManagerImpl(
         }
     }
 
-    override fun flipCamera() {
-        (videoCapturer as? Camera2Capturer)?.switchCamera(null)
-    }
+//    override fun flipCamera() {
+//        (videoCapturer as? Camera2Capturer)?.switchCamera(null)
+//    }
 
     override fun enableMicrophone(enabled: Boolean) {
         audioManager?.isMicrophoneMute = !enabled
@@ -200,13 +200,13 @@ class WebRtcSessionManagerImpl(
         localAudioTrack.setEnabled(enabled)
     }
 
-    override fun enableCamera(enabled: Boolean) {
-        if (enabled) {
-            videoCapturer.startCapture(resolution.width, resolution.height, 30)
-        } else {
-            videoCapturer.stopCapture()
-        }
-    }
+//    override fun enableCamera(enabled: Boolean) {
+//        if (enabled) {
+//            videoCapturer.startCapture(resolution.width, resolution.height, 30)
+//        } else {
+//            videoCapturer.stopCapture()
+//        }
+//    }
 
     override fun disconnect() {
         // dispose audio & video tracks.
@@ -221,8 +221,8 @@ class WebRtcSessionManagerImpl(
 
         // dispose audio handler and video capturer.
         audioHandler.stop()
-        videoCapturer.stopCapture()
-        videoCapturer.dispose()
+//        videoCapturer.stopCapture()
+//        videoCapturer.dispose()
 
         // dispose signaling clients and socket.
         signalingClient.dispose()

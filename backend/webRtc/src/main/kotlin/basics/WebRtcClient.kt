@@ -1,6 +1,6 @@
 package basics
 
 object WebRtcClient {
-    fun getWebRtcSubscription(conversationId: String) = "/app/queue/conversation/$conversationId"
-    fun getWebRtcSendingUrl(conversationId: String) = "/app/conversation/$conversationId"
+    fun getWebRtcSubscription(roomId: Long) = "/app/queue/room/$roomId/voiceChat"
+    fun getWebRtcSendingUrl(roomId: Long) = "/app/conversation/$roomId"
 }

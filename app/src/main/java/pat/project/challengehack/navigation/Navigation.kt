@@ -17,6 +17,7 @@ import pat.project.challengehack.navigation.Screens.Companion.ROOM_DEFAULT_ID
 import pat.project.challengehack.navigation.Screens.Companion.ROOM_ID
 import pat.project.challengehack.navigation.Screens.Companion.ALBUM_ID
 import pat.project.challengehack.navigation.Screens.Companion.ALBUM_ID_DEFAULT
+import pat.project.challengehack.navigation.Screens.Companion.ARTIFACT
 import pat.project.challengehack.navigation.Screens.Companion.GENRE_NAME
 import pat.project.challengehack.navigation.Screens.Companion.GENRE_NAME_DEFAULT
 import pat.project.challengehack.navigation.utils.navigateAndClean
@@ -193,7 +194,7 @@ fun Navigation(
             composable(
                 route = Screens.RoomScreen.screenRoute,
                 deepLinks = listOf(navDeepLink {
-                    uriPattern = "http://300notes/room/join/{$ROOM_ID}"
+                    uriPattern = "http://300notes/room/{$ROOM_ID}-{$ARTIFACT}"
                 })
             ) { backStackEntry ->
                 val roomId = backStackEntry.arguments?.getString(ROOM_ID)?.toLong() ?: ROOM_DEFAULT_ID
@@ -339,7 +340,7 @@ sealed class Screens(
         screenRoute = "$groupChatScreenRoute/{$MY_ID}/{$ROOM_ID}"
     ) {
         fun destination(mineId: Long, chat : Long): String {
-            return "$roomScreenRoute/$mineId/$chat"
+            return "$groupChatScreenRoute/$mineId/$chat"
         }
 
         override val arguments: List<NamedNavArgument>
@@ -413,6 +414,8 @@ sealed class Screens(
 
         const val ROOM_ID = "roomId"
         const val ROOM_DEFAULT_ID = 0L
+
+        const val ARTIFACT = "artifact"
 
 
         const val REDIRECTION_STATUS = "RedirectionStatus"
