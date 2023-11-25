@@ -2,7 +2,9 @@
 <resources>
     <string name="login">Логин</string>
     <string name="password">Пароль</string>
+    <string name="email">Почта</string>
     <string name="enter">Вход</string>
+    <string name="enter_ready">Войти</string>
+    <string name="enter_with">Войти через</string>
     <string name="registration">Регистрация</string>
-    <string name="enter_with">Регистрация</string>
 </resources>

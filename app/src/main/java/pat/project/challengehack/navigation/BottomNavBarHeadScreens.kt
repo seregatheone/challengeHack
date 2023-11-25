@@ -11,10 +11,10 @@ sealed class BottomNavBarHeadScreens(
         bottomNavIcon = BottomNavigationItem.MainItem
     )
 
-//    object Search : BottomNavBarHeadScreens(
-//        route = searchScreenRoute,
-//        bottomNavIcon = BottomNavigationItem.SearchItem
-//    )
+    object Library : BottomNavBarHeadScreens(
+        route = libraryScreenRoute,
+        bottomNavIcon = BottomNavigationItem.LibItem
+    )
 
     object Friends : BottomNavBarHeadScreens(
         route = friendsScreenRoute,
@@ -29,13 +29,13 @@ sealed class BottomNavBarHeadScreens(
     companion object {
         const val mainScreenRoute = "mainScreen"
         const val friendsScreenRoute = "friendsScreen"
-//        const val searchScreenRoute = "searchScreen"
+        const val libraryScreenRoute = "libraryScreen"
         const val profileScreenRoute = "profileScreen"
 
         fun getScreen(destinationHead: String?): BottomNavBarHeadScreens? {
             return when (destinationHead) {
                 Profile.route -> Profile
-//                Search.route -> Search
+                Library.route -> Library
                 Friends.route -> Friends
                 Main.route -> Main
                 else -> {

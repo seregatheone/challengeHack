@@ -2,6 +2,7 @@ package pat.project.challengehack.screens.authRegLoading.featureloading
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -40,8 +41,8 @@ fun FeatureLoadingScreen(
     Box(
         modifier = modifier
             .background(Color.White)
+            .fillMaxSize()
     ) {
-        Text("123", color = Color.Black)
         CircularProgressIndicator(
             modifier = Modifier
                 .width(82.dp)

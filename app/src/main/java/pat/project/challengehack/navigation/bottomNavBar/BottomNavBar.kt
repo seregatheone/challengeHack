@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import core.ui.themes.AppResources
 import pat.project.challengehack.navigation.BottomNavBarHeadScreens
 
 @Composable
@@ -42,7 +43,7 @@ fun BottomNavBar(
     ) {
         BottomNavigation(
             modifier = modifier,
-//            backgroundColor = AppResources.colors.PurpleDarkOnCLick,
+            backgroundColor = AppResources.colors.Black,
             elevation = 2.dp,
         ) {
             Row(
@@ -57,15 +58,15 @@ fun BottomNavBar(
                     navigate = navigate,
                     profilePhoto = null
                 )
-//                BottomNavBarItemComponent(
-//                    bottomNavBarHeadScreens = BottomNavBarHeadScreens.Search,
-//                    isItemSelected = BottomNavBarHeadScreens.Search == currentChildScreen,
-//                    navigate = navigate,
-//                    profilePhoto = null
-//                )
                 BottomNavBarItemComponent(
                     bottomNavBarHeadScreens = BottomNavBarHeadScreens.Friends,
                     isItemSelected = BottomNavBarHeadScreens.Friends == currentChildScreen,
+                    navigate = navigate,
+                    profilePhoto = null
+                )
+                BottomNavBarItemComponent(
+                    bottomNavBarHeadScreens = BottomNavBarHeadScreens.Library,
+                    isItemSelected = BottomNavBarHeadScreens.Library == currentChildScreen,
                     navigate = navigate,
                     profilePhoto = null
                 )

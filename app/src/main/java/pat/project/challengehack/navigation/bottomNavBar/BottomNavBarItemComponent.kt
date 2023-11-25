@@ -1,5 +1,6 @@
 package pat.project.challengehack.navigation.bottomNavBar
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -48,7 +49,7 @@ fun BottomNavBarItemComponent(
                 modifier = modifier
                     .size(36.dp)
                     .clip(shape = CircleShape)
-//                    .background(color = AppResources.colors.White70, shape = CircleShape)
+                    .background(color = AppResources.colors.MainRed , shape = CircleShape)
                     .border(
                         width = if (isItemSelected) 2.dp else 0.dp,
                         color = Color.Black,
@@ -65,7 +66,7 @@ fun BottomNavBarItemComponent(
         }else{
             Icon(
                 painter = painterResource(id = bottomNavBarHeadScreens.bottomNavIcon.iconId),
-//                tint = if (isItemSelected) AppResources.colors.YellowGold else Color.Unspecified,
+                tint = if (isItemSelected) AppResources.colors.MainRed else Color.Unspecified,
                 contentDescription = null
             )
         }

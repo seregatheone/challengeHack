@@ -13,10 +13,10 @@ sealed class BottomNavigationItem(
         itemName = mainItemName
     )
 
-//    object SearchItem : BottomNavigationItem(
-//        iconId = R.drawable.ic_botton_nav_bar_search,
-//        itemName = searchItem
-//    )
+    object LibItem : BottomNavigationItem(
+        iconId =  R.drawable.ic_lucide_library_big,
+        itemName = libItem
+    )
 
     object FriendsItem : BottomNavigationItem(
         iconId = R.drawable.ic_botton_nav_bar_friends,
@@ -30,7 +30,7 @@ sealed class BottomNavigationItem(
 
     companion object{
         const val mainItemName = "mainItem"
-        const val searchItem = "searchItem"
+        const val libItem = "libItem"
         const val friendsItem = "friendsItem"
         const val profileItem = "profileItem"
     }
