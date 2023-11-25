@@ -9,6 +9,8 @@ import basic.data.webRtc.AudioHandler
 import basic.domain.websocket.WebsocketMessageReceivedEntity
 import basic.domain.websocket.WebsocketMessageSendEntity
 import basics.WebRtcSocketProvider
+import dagger.Lazy
+import dagger.hilt.android.AndroidEntryPoint
 import impl.data.managers.WebRtcSessionManager
 import impl.data.providers.WebRtcDataConnector
 import impl.data.providers.WebsocketStompDataConnector
@@ -26,6 +28,8 @@ import pat.project.challengehack.services.audio.handlers.AudioSwitchHandler
 import websockets.basics.StompWebsocketProvider
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataConnector {
     // Binder given to clients.
     private val binder = LocalBinder()
@@ -42,14 +46,14 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     }
 
     @Inject
-    lateinit var stompWebsocketProviderImpl: StompWebsocketProviderImpl
+    lateinit var stompWebsocketProviderImpl: Lazy<StompWebsocketProviderImpl>
 
     private val stompWebsocketProvider : StompWebsocketProvider by lazy{
-        stompWebsocketProviderImpl
+        stompWebsocketProviderImpl.get()
     }
 
     private val stompWebRtcProvider : WebRtcSocketProvider by lazy{
-        stompWebsocketProviderImpl
+        stompWebsocketProviderImpl.get()
     }
 
 
@@ -94,8 +98,8 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     }
 
     ////////////////   WebRtc
-    override fun connectToWebRtc() {
-        stompWebRtcProvider.connectWebRtc(1)
+    override fun connectToWebRtc(conversationId : String) {
+        stompWebRtcProvider.connectWebRtc(conversationId)
         serviceScope.launch {
             sessionManager.signalingClient.sessionStateFlow.collectLatest {sessionState ->
                 Log.i("sessionState", sessionState.name)

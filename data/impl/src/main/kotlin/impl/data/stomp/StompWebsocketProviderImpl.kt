@@ -152,14 +152,14 @@ class StompWebsocketProviderImpl(
 
     ////////////////   WebRtc
 
-    private var lastConversationId = 1
+    private var lastConversationId : String = ""
 
     private val _sessionStateFlow = MutableStateFlow(WebRTCSessionState.Offline)
     override val sessionStateFlow = _sessionStateFlow.asStateFlow()
 
     private val _signalingCommandFlow = MutableSharedFlow<Pair<SignalingCommand, String>>()
     override val signalingCommandFlow = _signalingCommandFlow.asSharedFlow()
-    override fun connectWebRtc(conversationId : Int) {
+    override fun connectWebRtc(conversationId : String) {
         lastConversationId = conversationId
         val topicSubscribe = stompClient.topic(WebRtcClient.getWebRtcSubscription(conversationId))
             .subscribeOn(Schedulers.io(), false)
@@ -229,13 +229,13 @@ class StompWebsocketProviderImpl(
     }
 
     override fun disconnectWebRtc() {
-        lastConversationId = -1
+        lastConversationId = ""
         _sessionStateFlow.value = WebRTCSessionState.Offline
         signalingScope.cancel()
     }
 
     override fun dispose() {
-        lastConversationId = -1
+        lastConversationId = ""
         _sessionStateFlow.value = WebRTCSessionState.Offline
         signalingScope.cancel()
     }
