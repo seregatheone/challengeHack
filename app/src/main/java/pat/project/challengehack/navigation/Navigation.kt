@@ -152,6 +152,9 @@ fun Navigation(
                     GenreScreen(
                         modifier = Modifier.fillMaxSize(),
                         genreName = genreName,
+                        onclickBack = {
+                            navController.navigate(Screens.Main.destination())
+                        },
                     )
                 }
 
@@ -161,6 +164,9 @@ fun Navigation(
                     AlbumSreen(
                         modifier = Modifier.fillMaxSize(),
                         albumId = albumId,
+                        onclickBack = {
+                            navController.navigate(Screens.Main.destination())
+                        },
                     )
                 }
 

@@ -1,7 +1,9 @@
 package pat.project.challengehack.screens.album
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -29,6 +32,7 @@ fun AlbumSreen(
     modifier: Modifier = Modifier,
     viewModel: AlbumViewModel = hiltViewModel(),
     albumId: Int,
+    onclickBack: () -> Unit
 ){
     LaunchedEffect(key1 = Unit) {
         viewModel.getAlbumMusicById(albumId)
@@ -39,18 +43,25 @@ fun AlbumSreen(
     Scaffold(modifier = Modifier
         .fillMaxSize(),
         topBar = {
-            Row(
+            Box(
                 modifier = Modifier
-                    .background(color = AppResources.colors.Black)
-                    .statusBarsPadding()
+                    .background(AppResources.colors.Black)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
             ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.charm_arrow_up__1_),
+                    contentDescription = null,
+                    tint = AppResources.colors.White,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .clickable { onclickBack() }
+                        .padding(start = 20.dp)
+                )
                 Icon(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(top = 4.dp),
+                        .align(Alignment.Center),
                     tint = AppResources.colors.White,
                 )
             }
