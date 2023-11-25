@@ -19,7 +19,7 @@ import core.ui.themes.AppResources
 fun FilledColorSmallRoundedButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    buttonStyle: FilledButtonStyles = FilledButtonStyles.YELLOW,
+    buttonStyle: FilledButtonStyles = FilledButtonStyles.MAINRED,
     text: String,
     width: Dp = 140.dp,
     height: Dp = 27.dp,

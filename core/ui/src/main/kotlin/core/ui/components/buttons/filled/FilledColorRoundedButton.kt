@@ -16,7 +16,7 @@ import core.ui.themes.AppResources
 fun FilledColorRoundedButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    buttonStyle: FilledButtonStyles = FilledButtonStyles.YELLOW,
+    buttonStyle: FilledButtonStyles = FilledButtonStyles.MAINRED,
     text: String,
     width: Dp = 240.dp,
     height: Dp = 60.dp,
@@ -29,23 +29,18 @@ fun FilledColorRoundedButton(
         ),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-//            backgroundColor = when (buttonStyle) {
-//                FilledButtonStyles.PURPLE -> AppResources.colors.DarkOnPurple
-//                FilledButtonStyles.YELLOW -> AppResources.colors.YellowGold
-//                FilledButtonStyles.PURPLE_LIGHT -> AppResources.colors.LightPurple
-//            }
+            backgroundColor = when (buttonStyle) {
+                FilledButtonStyles.MAINRED -> AppResources.colors.MainRed
+                FilledButtonStyles.GREY60 -> AppResources.colors.Grey60
+            }
         ),
         shape = RoundedCornerShape(cornersRadius),
         interactionSource = MutableInteractionSource()
     ) {
         Text(
             text = text,
-//            color = when (buttonStyle) {
-//                FilledButtonStyles.PURPLE -> AppResources.colors.White
-//                FilledButtonStyles.YELLOW -> AppResources.colors.DarkPurple
-//                FilledButtonStyles.PURPLE_LIGHT -> AppResources.colors.White
-//            },
-//            style = AppResources.typography.titles.title0
+            color = AppResources.colors.White,
+            style = AppResources.typography.titles.title0
         )
     }
 }

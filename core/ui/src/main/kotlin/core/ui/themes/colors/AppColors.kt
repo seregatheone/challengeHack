@@ -12,7 +12,11 @@ sealed class AppColors(
     val White: Color,
     val MainRed: Color,
     val Online: Color,
+    val Grey60: Color,
     val Grey70: Color,
+    val Grey80: Color,
+    val Grey90: Color,
+    val Grey90_60: Color,
 ) {
     class DarkThemeAppColors : AppColors(
         Black = Black,
@@ -20,7 +24,11 @@ sealed class AppColors(
         White = White,
         MainRed = MainRed,
         Online = Online,
+        Grey60 = Grey60,
         Grey70 = Grey70,
+        Grey80 = Grey80,
+        Grey90 = Grey90,
+        Grey90_60 = Grey90_60,
     )
 }
 

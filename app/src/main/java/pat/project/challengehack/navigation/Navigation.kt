@@ -13,7 +13,9 @@ import pat.project.challengehack.screens.authRegLoading.auth.AuthorizationScreen
 import pat.project.challengehack.screens.authRegLoading.featureloading.FeatureLoadingScreen
 import pat.project.challengehack.screens.authRegLoading.registration.RegistrationScreen
 import pat.project.challengehack.screens.authRegLoading.welcomepage.WelcomePageScreen
+import pat.project.challengehack.screens.container.ContainerScreen
 import pat.project.challengehack.screens.friends.friendsScreen.FriendsScreen
+import pat.project.challengehack.screens.library.LibraryScreen
 import pat.project.challengehack.screens.main.mainScreen.MainScreen
 import pat.project.challengehack.screens.profile.profileScreen.ProfileScreen
 
@@ -23,130 +25,140 @@ fun Navigation(
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
-
-    NavHost(
-        modifier = modifier,
+    ContainerScreen(
+        modifier = Modifier.fillMaxSize(),
         navController = navController,
-        startDestination = Screens.FeatureLoading.screenRoute,
     ) {
-        composable(route = Screens.FeatureLoading.screenRoute) {
-            FeatureLoadingScreen(
-                modifier = Modifier.fillMaxSize(),
-                navigateToWelcomePage = {
-                    navController.navigate(Screens.WelcomePage.destination())
-                },
-                navigateToMainScreen = {
-                    navController.navigate(Screens.ContainerScreen.destination())
-                }
-            )
-        }
-
-        composable(route = Screens.WelcomePage.screenRoute) {
-            WelcomePageScreen(
-                modifier = Modifier.fillMaxSize(),
-                navigateToAuthorization = {
-                    navController.navigate(Screens.Authorization.destination())
-                },
-                navigateToRegistration = {
-                    navController.navigate(Screens.Registration.destination())
-                },
-            )
-        }
-
-        composable(route = Screens.Authorization.screenRoute) {
-            AuthorizationScreen(
-                modifier = Modifier.fillMaxSize(),
-                onclickBack = {
-                    navController.navigate(Screens.WelcomePage.destination())
-                },
-                onclickReg = {
-                    navController.navigate(Screens.Registration.destination())
-                },
-                navigateToMainWithPopBackStack = {
-                    navController.navigate(
-                        Screens.Main.screenRoute
-                    )
-                },
-            )
-        }
-
-        composable(route = Screens.Registration.screenRoute) {
-            RegistrationScreen(
-                modifier = Modifier.fillMaxSize(),
-                onclickBack = {
-                    navController.navigate(Screens.WelcomePage.destination())
-                },
-                navigateToMainWithPopBackStack = {
-                    navController.navigateAndClean(
-                        Screens.Main.screenRoute
-                    )
-                },
-                onclickLogIn = {
-                    navController.navigate(Screens.Authorization.destination())
-                }
-            )
-        }
-
-        navigation(startDestination = Screens.Main.screenRoute, route = Screens.ContainerScreen.screenRoute){
-            composable(route = Screens.Main.screenRoute) {
-                MainScreen(
+        NavHost(
+            modifier = modifier,
+            navController = navController,
+            startDestination = Screens.FeatureLoading.screenRoute,
+        ) {
+            composable(route = Screens.FeatureLoading.screenRoute) {
+                FeatureLoadingScreen(
                     modifier = Modifier.fillMaxSize(),
-                    navigateToFriendsListWithPopBack = {
-                        navController.navigateAndClean(
-                            Screens.Friends.destination()
+                    navigateToWelcomePage = {
+                        navController.navigate(Screens.WelcomePage.destination())
+                    },
+                    navigateToMainScreen = {
+                        navController.navigate(Screens.ContainerScreen.destination())
+                    }
+                )
+            }
+
+            composable(route = Screens.WelcomePage.screenRoute) {
+                WelcomePageScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    navigateToAuthorization = {
+                        navController.navigate(Screens.Authorization.destination())
+                    },
+                    navigateToRegistration = {
+                        navController.navigate(Screens.Registration.destination())
+                    },
+                )
+            }
+
+            composable(route = Screens.Authorization.screenRoute) {
+                AuthorizationScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    onclickBack = {
+                        navController.navigate(Screens.WelcomePage.destination())
+                    },
+                    onclickReg = {
+                        navController.navigate(Screens.Registration.destination())
+                    },
+                    navigateToMainWithPopBackStack = {
+                        navController.navigate(
+                            Screens.ContainerScreen.destination()
                         )
                     },
-                    navigateToChat = { chatId ->
+                )
+            }
+
+            composable(route = Screens.Registration.screenRoute) {
+                RegistrationScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    onclickBack = {
+                        navController.navigate(Screens.WelcomePage.destination())
+                    },
+                    navigateToMainWithPopBackStack = {
+                        navController.navigateAndClean(
+                            Screens.ContainerScreen.destination()
+                        )
+                    },
+                )
+            }
+
+            navigation(
+                startDestination = Screens.Main.screenRoute,
+                route = Screens.ContainerScreen.screenRoute
+            ) {
+                composable(route = Screens.Main.screenRoute) {
+                    MainScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        navigateToFriendsListWithPopBack = {
+                            navController.navigateAndClean(
+                                Screens.Friends.destination()
+                            )
+                        },
+                        navigateToChat = { chatId ->
 //                        navController.navigate(
 //                            Screens.DirectMessagesScreen.destination(chatId)
 //                        )
-                    },
-                    navigateToServer = { serverId ->
+                        },
+                        navigateToServer = { serverId ->
 //                        navController.navigate(
 //                            Screens.Servers.destination(serverId)
 //                        )
-                    },
-                )
-            }
-            composable(route = Screens.Friends.screenRoute) {
-                FriendsScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    navigateToFriendsRequest = {
+                        },
+                    )
+                }
+                composable(route = Screens.Friends.screenRoute) {
+                    FriendsScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        navigateToFriendsRequest = {
 //                        navController.navigateAndClean(
 //                            Screens.FriendsRequest.destination()
 //                        )
-                    },
-                    navigateToCall = { userId ->
+                        },
+                        navigateToCall = { userId ->
 //                        navController.navigate(
 //                            Screens.Call.destination(userId)
 //                        )
-                    },
-                    navigateToChat = { chatId ->
+                        },
+                        navigateToChat = { chatId ->
 //                        navController.navigate(
 //                            Screens.DirectMessagesScreen.destination(chatId)
 //                        )
-                    }
-                )
-            }
-            composable(route = Screens.profileScreenRoute) {
-                ProfileScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    navigateToWelcomePageWithPopBackStack = {
-                        navController.navigateAndClean(
-                            Screens.WelcomePage.destination()
-                        )
-                    },
-                    navigateToAccountSettings = {
+                        }
+                    )
+                }
+                composable(route = Screens.Library.screenRoute) {
+                    LibraryScreen(
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+                composable(route = Screens.profileScreenRoute) {
+                    ProfileScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        navigateToWelcomePageWithPopBackStack = {
+                            navController.navigateAndClean(
+                                Screens.WelcomePage.destination()
+                            )
+                        },
+                        navigateToAccountSettings = {
 //                        navController.navigateAndClean(
 //                            Screens.AccountSettingsPage.destination()
 //                        )
-                    }
-                )
+                        }
+                    )
+                }
             }
+
+
         }
-
-
     }
+
 }
 
 
@@ -229,6 +241,17 @@ sealed class Screens(
             get() = emptyList()
     }
 
+    object Library : Screens(
+        screenRoute = libraryScreenRoute,
+    ) {
+        fun destination(): String {
+            return libraryScreenRoute
+        }
+
+        override val arguments: List<NamedNavArgument>
+            get() = emptyList()
+    }
+
     object Profile : Screens(
         screenRoute = profileScreenRoute,
     ) {
@@ -261,6 +284,7 @@ sealed class Screens(
 
         const val mainScreenRoute = "mainScreen"
         const val friendsScreenRoute = "friendsScreen"
+        const val libraryScreenRoute = "libraryScreen"
         const val serversScreenRoute = "serversScreen"
         const val friendsRequestScreenRoute = "friendsRequestScreen"
         const val profileScreenRoute = "profileScreen"

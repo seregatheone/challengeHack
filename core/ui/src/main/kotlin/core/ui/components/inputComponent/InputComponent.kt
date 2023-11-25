@@ -32,7 +32,8 @@ fun InputComponent(
     isValid: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    backgroundColor: Color //= AppResources.colors.PurpleGreyMedium,
+    backgroundColor: Color = AppResources.colors.Grey90_60,
+    textColor: Color = AppResources.colors.Grey80
 ){
     var isFocused by remember {
         mutableStateOf(false)
@@ -55,14 +56,15 @@ fun InputComponent(
                     shape = RoundedCornerShape(12.dp)
                 )
                 .fillMaxWidth()
-                .padding(start = 36.dp, top = 9.dp, bottom = 9.dp),
+                .padding(horizontal = 12.dp)
+                .padding(vertical = 10.dp),
             decorationBox = { innerTextBox ->
                 if (!isFocused && value.isEmpty()) {
                     Text(
                         modifier = Modifier
                             .background(Color.Unspecified),
                         text = placeholder,
-                        style = AppResources.typography.titles.title1.copy(color = AppResources.colors.White),
+                        style = AppResources.typography.titles.title1.copy(color = textColor),
                     )
                 } else {
                     innerTextBox()
