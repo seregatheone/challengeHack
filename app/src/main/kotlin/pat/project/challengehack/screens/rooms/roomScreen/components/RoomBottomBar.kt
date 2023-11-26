@@ -20,7 +20,8 @@ fun RoomBottomBar(
     toggleMicro : () -> Unit,
     isVolumeOn : Boolean,
     toggleVolume : () -> Unit,
-    onFinishAndLeave: () -> Unit
+    onFinishAndLeave: () -> Unit,
+    isOwner: Boolean,
 ) {
     Row(
         modifier = Modifier
@@ -39,23 +40,34 @@ fun RoomBottomBar(
         CustomIconButton(
             iconButtonStyle = if (isMicroOn) IconButtonStyles.MIC else IconButtonStyles.MICOFF,
             onCLick = toggleMicro,
-            color = if (isMicroOn) AppResources.colors.Grey90 else AppResources.colors.Grey70,
+            color = if (isMicroOn) AppResources.colors.Grey90 else AppResources.colors.White,
             modifier = Modifier,
-            tint = AppResources.colors.White
+            tint = if (isMicroOn) AppResources.colors.White else AppResources.colors.SystemError,
         )
         CustomIconButton(
             iconButtonStyle = if(isVolumeOn) IconButtonStyles.VOLUME else IconButtonStyles.VOLUMEOFF,
             onCLick = toggleVolume,
-            color = if (isVolumeOn) AppResources.colors.Grey90 else AppResources.colors.Grey70,
+            color = if (isVolumeOn) AppResources.colors.Grey90 else AppResources.colors.White,
             modifier = Modifier,
-            tint = AppResources.colors.White
+            tint = if (isVolumeOn) AppResources.colors.White else AppResources.colors.SystemError,
         )
-        CustomIconButton(
-            iconButtonStyle = IconButtonStyles.PHONE,
-            onCLick = onFinishAndLeave,
-            color = AppResources.colors.Grey90,
-            modifier = Modifier,
-            tint = AppResources.colors.White
-        )
+        if (isOwner){
+            CustomIconButton(
+                iconButtonStyle = IconButtonStyles.EXIT,
+                onCLick = onFinishAndLeave,
+                color = AppResources.colors.SystemError,
+                modifier = Modifier,
+                tint = AppResources.colors.White,
+            )
+        }else   {
+            CustomIconButton(
+                iconButtonStyle = IconButtonStyles.PHONE,
+                onCLick = onFinishAndLeave,
+                color = AppResources.colors.SystemError,
+                modifier = Modifier,
+                tint = AppResources.colors.White,
+            )
+        }
+
     }
 }

@@ -13,6 +13,10 @@ class RoomInteractorImpl(
         return roomRepository.createRoom()
     }
 
+    override suspend fun joinInRoom(roomId: Long, artifact: String): Entity<RoomAllInfoEntity> {
+        return roomRepository.joinInRoom(roomId,artifact)
+    }
+
     override suspend fun getRoomAllInfoByRoomId(roomId: Long): Entity<RoomAllInfoEntity> {
         return roomRepository.getRoomAllInfoByRoomId(roomId)
     }

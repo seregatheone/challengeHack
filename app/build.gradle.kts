@@ -112,6 +112,8 @@ dependencies {
     implementation(Dependencies.WebRtc.lib)
     implementation(Dependencies.WebRtc.logger)
 
+    implementation ("com.simonsickle:composed-barcodes:1.1.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     //module
     implementation(project(":core:ui"))
 

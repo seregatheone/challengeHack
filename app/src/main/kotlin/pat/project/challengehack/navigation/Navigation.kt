@@ -184,7 +184,8 @@ fun Navigation(
                     navigateToRoomScreen = {roomId ->
                         navController.navigate(
                             Screens.RoomScreen.destination(
-                                roomId
+                                roomId,
+                                artifact = "1"
                             )
                         )
                     }
@@ -194,11 +195,11 @@ fun Navigation(
             composable(
                 route = Screens.RoomScreen.screenRoute,
                 deepLinks = listOf(navDeepLink {
-                    uriPattern = "http://300notes/room/{$ROOM_ID}-{$ARTIFACT}"
+                    uriPattern = "http://300notes/room/join/{$ROOM_ID}-{$ARTIFACT}"
                 })
             ) { backStackEntry ->
                 val roomId = backStackEntry.arguments?.getString(ROOM_ID)?.toLong() ?: ROOM_DEFAULT_ID
-
+                val artifact = backStackEntry.arguments?.getString(ARTIFACT) ?: ""
                 RoomScreen(
                     modifier = Modifier.fillMaxSize(),
                     roomId = roomId,
@@ -212,7 +213,8 @@ fun Navigation(
                                 chat = roomId
                             )
                         )
-                    }
+                    },
+                    artifact = artifact
                 )
             }
 
@@ -321,17 +323,20 @@ sealed class Screens(
     }
 
     object RoomScreen : Screens(
-        screenRoute = "$roomScreenRoute/{$ROOM_ID}"
+        screenRoute = "$roomScreenRoute/{$ROOM_ID}/{$ARTIFACT}"
     ) {
-        fun destination(roomId: Long): String {
-            return "$roomScreenRoute/$roomId"
+        fun destination(roomId: Long, artifact: String): String {
+            return "$roomScreenRoute/$roomId/$artifact"
         }
 
         override val arguments: List<NamedNavArgument>
             get() = listOf(
                 navArgument(ROOM_ID) {
                     type = NavType.StringType
-                }
+                },
+                navArgument(ARTIFACT) {
+                    type = NavType.StringType
+                },
             )
 
     }
@@ -413,9 +418,9 @@ sealed class Screens(
         const val USER_ID_DEFAULT = 0
 
         const val ROOM_ID = "roomId"
+        const val ARTIFACT = "artifact"
         const val ROOM_DEFAULT_ID = 0L
 
-        const val ARTIFACT = "artifact"
 
 
         const val REDIRECTION_STATUS = "RedirectionStatus"
