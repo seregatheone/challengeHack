@@ -152,16 +152,19 @@ class StompWebsocketProviderImpl(
 
     ////////////////   WebRtc
 
-    private var lastConversationId : String = ""
+    private var connectedRooms = mutableListOf<Long>()
 
     private val _sessionStateFlow = MutableStateFlow(WebRTCSessionState.Offline)
     override val sessionStateFlow = _sessionStateFlow.asStateFlow()
 
     private val _signalingCommandFlow = MutableSharedFlow<Pair<SignalingCommand, String>>()
     override val signalingCommandFlow = _signalingCommandFlow.asSharedFlow()
-    override fun connectWebRtc(conversationId : String) {
-        lastConversationId = conversationId
-        val topicSubscribe = stompClient.topic(WebRtcClient.getWebRtcSubscription(conversationId))
+    override fun connectWebRtc(roomId : Long) {
+//        if(connectedRooms.size > 1)){
+//            disconnectWebRtc()
+//        }
+        connectedRooms.add(roomId)
+        val topicSubscribe = stompClient.topic(WebRtcClient.getWebRtcSubscription(roomId))
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
@@ -222,23 +225,24 @@ class StompWebsocketProviderImpl(
     override fun sendCommand(signalingCommand: SignalingCommand, message: String) {
         sendCompletable(
             stompClient.send(
-                WebRtcClient.getWebRtcSendingUrl(lastConversationId),
+                WebRtcClient.getWebRtcSendingUrl(connectedRooms.first()),
                 "$signalingCommand $message"
             )
         )
     }
 
     override fun disconnectWebRtc() {
-        lastConversationId = ""
+        connectedRooms.clear()
         _sessionStateFlow.value = WebRTCSessionState.Offline
         signalingScope.cancel()
     }
 
     override fun dispose() {
-        lastConversationId = ""
+        connectedRooms.clear()
         _sessionStateFlow.value = WebRTCSessionState.Offline
         signalingScope.cancel()
     }
+
 
     companion object {
         val TAG = StompWebsocketProviderImpl::class.toString()

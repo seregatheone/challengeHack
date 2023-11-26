@@ -38,6 +38,7 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.hilt.navigation.compose.hiltViewModel
 import core.ui.components.buttons.filled.FilledColorRoundedButton
 import core.ui.themes.AppResources
+import pat.project.challengehack.LocalWebRtcDataConnector
 import pat.project.challengehack.MainActivity
 import pat.project.challengehack.R
 import pat.project.challengehack.screens.rooms.roomsScreenStart.components.InvitationComponent
@@ -85,6 +86,7 @@ fun RoomsStartScreen(
             }
         }
     }
+
 
     Scaffold(
         modifier = modifier

@@ -41,7 +41,7 @@ fun GroupChatScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.getRoomInfoById(roomId)
+//        viewModel.getRoomInfoById(roomId)
         viewModel.setWebsocketConnector(
             websocketStompDataConnector,
             roomId

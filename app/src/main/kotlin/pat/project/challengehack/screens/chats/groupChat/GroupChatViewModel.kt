@@ -59,11 +59,11 @@ class GroupChatViewModel @Inject constructor(
         }
     }
 
-    fun getRoomInfoById(roomId : Long){
-        viewModelScope.launch {
-            roomInteractor.getRoomAllInfoByRoomId(roomId)
-        }
-    }
+//    fun getRoomInfoById(roomId : Long){
+//        viewModelScope.launch {
+//            roomInteractor.getRoomAllInfoByRoomId(roomId)
+//        }
+//    }
 
     fun setWebsocketConnector(
         websocketStompDataConnector: WebsocketStompDataConnector,

@@ -345,7 +345,7 @@ sealed class Screens(
         screenRoute = "$groupChatScreenRoute/{$MY_ID}/{$ROOM_ID}"
     ) {
         fun destination(mineId: Long, chat : Long): String {
-            return "$roomScreenRoute/$mineId/$chat"
+            return "$groupChatScreenRoute/$mineId/$chat"
         }
 
         override val arguments: List<NamedNavArgument>
