@@ -105,7 +105,8 @@ fun ProfileScreen(
                         )
                 )
                 Column(
-                    modifier = Modifier.align(Alignment.TopCenter),
+                    modifier = Modifier.align(Alignment.TopCenter)
+                        .padding(top = 8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SkeletonWithContent(

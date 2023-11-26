@@ -28,13 +28,6 @@ class MainScreenViewModel @Inject constructor(
     private val _mainNavDirections = MutableStateFlow<MainNavDirections>(MainNavDirections.Default)
     val mainNavDirections = _mainNavDirections.asStateFlow()
 
-    val translationList = listOf<TransEntity>(
-        TransEntity(1, "", ""),
-        TransEntity(1, "", ""),
-        TransEntity(1, "", ""),
-        TransEntity(1, "", ""),
-    )
-
 
 
     fun getReleaseList() {
@@ -66,6 +59,16 @@ class MainScreenViewModel @Inject constructor(
                     _mainUIState.update { mainUiState ->
                         mainUiState.copy(
                             genreList = response.data
+                        )
+                    }
+                    _mainUIState.update { mainUiState ->
+                        mainUiState.copy(
+                            transList = listOf(
+                                TransEntity(23424,"Классика","http://94.45.223.241:46876/storage/file_74150c4b-ac6d-45b0-bfe3-d2adc8306adc8b548cb5-395f-4e4a-9aab-61c72debdff0.png"),
+                                TransEntity(17654534,"Шаман","http://94.45.223.241:46876/storage/file_3c78cf30-a101-4f0e-8d01-aa27fd5bc1ca82ba9b49-3918-4694-bcb4-dbe2dd4c0b77.png"),
+                                TransEntity(2344,"Помоигите","http://94.45.223.241:46876/storage/file_59b7921c-28a6-45b5-b9c5-484b8aeaf8f4a87b53c7-b8d4-4585-a434-5f364ac530b8.png"),
+                                TransEntity(5644,"Сон","http://94.45.223.241:46876/storage/file_74150c4b-ac6d-45b0-bfe3-d2adc8306adc8b548cb5-395f-4e4a-9aab-61c72debdff0.png"),
+                            )
                         )
                     }
                 }

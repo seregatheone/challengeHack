@@ -114,6 +114,7 @@ dependencies {
 
     implementation ("com.simonsickle:composed-barcodes:1.1.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation ("androidx.core:core-splashscreen:1.0.0")
     //
     implementation(Dependencies.ExoPlayer.lib)
 
