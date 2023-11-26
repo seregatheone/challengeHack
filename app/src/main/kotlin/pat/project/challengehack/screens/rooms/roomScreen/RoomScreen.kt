@@ -88,6 +88,8 @@ fun RoomScreen(
 
     val sessionManager = LocalSessionManager.current
     val stompProvider = LocalWebsocketConnector.current
+//
+//    val queue = stompProvider.messageFlow
 
     var qr by remember {
         mutableStateOf("")
@@ -121,7 +123,6 @@ fun RoomScreen(
         viewModel.createRoom()
         stompProvider.subscribeOnTracks(roomId)
         viewModel.getGenreMusicByName("КЛАССИКА")
-
     }
 
 
@@ -406,7 +407,13 @@ fun RoomScreen(
                 ) {
                     if (selectedTab == TabModel.ParticipantsAdvices) {
                         items(roomUiState.soundList) { item ->
-                            OfferItem(item = item, modifier = Modifier)
+                            OfferItem(
+                                item = item,
+                                modifier = Modifier,
+                                addTrackToQueue = {
+                                    stompProvider.addTrackToQueue(roomId,item.trackId)
+                                }
+                            )
                         }
                     } else {
                         items(roomUiState.soundList) { item ->

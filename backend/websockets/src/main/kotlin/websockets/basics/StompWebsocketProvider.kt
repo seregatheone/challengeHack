@@ -21,4 +21,6 @@ interface StompWebsocketProvider {
 
     fun listenToTracks(roomId : Long)
 
+    fun addTrackToQueue(roomId: Long, trackId : Long)
+
 }

@@ -186,6 +186,15 @@ class StompWebsocketProviderImpl(
         )
     }
 
+    override fun addTrackToQueue(roomId: Long, trackId : Long) {
+        sendCompletable(
+            stompClient.send(
+                RoomStompClientConfig.getAddToQueueTrack(roomId),
+                trackId.toString()
+            )
+        )
+    }
+
     override fun listenToInvites() {
         val topicSubscribe = stompClient.topic(RoomStompClientConfig.getListeningInvitesUrl())
             .subscribeOn(Schedulers.io(), false)
@@ -227,13 +236,14 @@ class StompWebsocketProviderImpl(
     }
 
     override fun listenToTracks(roomId: Long) {
-        val topicSubscribe = stompClient.topic(RoomStompClientConfig.getListeningInvitesUrl())
+        val topicSubscribe = stompClient.topic(RoomStompClientConfig.getTrackListeningUrl(roomId))
             .subscribeOn(Schedulers.io(), false)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
                 Log.i(TAG, topicMessage.payload)
 
                 try {
+                    val content = topicMessage.payload
                     val trackId = topicMessage.payload.split(':')[1].toLong()
 
                     coroutineScope.launch {

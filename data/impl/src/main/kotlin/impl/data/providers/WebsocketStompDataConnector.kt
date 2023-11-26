@@ -22,4 +22,6 @@ interface WebsocketStompDataConnector {
 
     fun subscribeOnTracks(roomId : Long)
 
+    fun addTrackToQueue(roomId : Long, trackId : Long)
+
 }
