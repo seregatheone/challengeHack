@@ -4,15 +4,15 @@
 
 
 # Стек технологий
-- Dependency Injection: Dagger hilt
+- Dependency Injection: Dagger hilt 
 - ForegroundService + Stomp websockets
 - UI Framework: Jetpack Compose
 - Network: Retrofit + OkHttp
 - Cache: SharedPreference / Datastore
 - UI: Material Design 3, Base compose ui components
-- Architecture: Clean Architecture
+- Architecture: Clean Architecture 
 - Pattern Presentation: MVVM, MVI
-- Builder Project: Gradle KTS
+- Builder Project: Gradle KTS 
 - Lifestreams: WebRtc + Hls  
 
 
@@ -34,4 +34,4 @@
 
 # Требования к запуску  
  Для сборки проекта нужна джава у грейдл сборщика > 18. Поддерживаемые api - 26..33.  
-# Ссылка на сборку в стейдж варианте ~ `https://disk.yandex.ru/d/1pQgOP8ZxLZpAw`
+ Ссылка на сборку в стейдж варианте ~ `https://disk.yandex.ru/d/1pQgOP8ZxLZpAw`
