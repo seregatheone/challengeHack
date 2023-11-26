@@ -12,10 +12,12 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RoomApi {
-    @GET
-    suspend fun getRoomInfoById(roomId: Long) : Response<RoomFullDataDto>
+    @GET("api/v2/room")
+    suspend fun getRoomInfoById(
+        @Query("roomId") roomId: Long) : Response<RoomFullDataDto>
     @POST("api/v2/room")
     suspend fun createRoom(): Response<RoomFullDataDto>
     @POST("api/v2/user/profiles")
@@ -23,12 +25,10 @@ interface RoomApi {
         @Body profileIdsDto: ProfileIdsDto
     ): Response<ProfilesDto>
 
-    @PUT("api/v2/room/{roomId}-{artifact}")
+    @PUT("api/v2/room/{roomId}")
     suspend fun joinInRoom(
         @Path("roomId")
         roomId: Long,
-        @Path("artifact")
-        artifact: String,
     ): Response<RoomFullDataDto>
 
     suspend fun getAllInvites() : Response<List<RoomsInvitationDtoResponse>>

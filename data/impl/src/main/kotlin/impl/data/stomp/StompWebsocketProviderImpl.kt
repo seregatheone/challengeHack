@@ -59,6 +59,13 @@ class StompWebsocketProviderImpl(
     )
     override val trackFlow: SharedFlow<Long> = _trackFlow
 
+    private val _newUserAdded = MutableSharedFlow<Long>(
+        replay = 2,
+        extraBufferCapacity = 3,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+    override val newUserAdded: SharedFlow<Long> = _newUserAdded
+
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     private val signalingScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -186,13 +193,54 @@ class StompWebsocketProviderImpl(
         )
     }
 
-    override fun addTrackToQueue(roomId: Long, trackId : Long) {
+    override fun addTrackToQueue(roomId: Long, trackId: Long) {
         sendCompletable(
             stompClient.send(
                 RoomStompClientConfig.getAddToQueueTrack(roomId),
                 trackId.toString()
             )
         )
+    }
+
+    override fun newUserAddedListener(roomId: Long) {
+        val topicSubscribe =
+            stompClient.topic(RoomStompClientConfig.getNewUsersListeningUrl(roomId))
+                .subscribeOn(Schedulers.io(), false)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ topicMessage: StompMessage ->
+                    Log.i(TAG, topicMessage.payload)
+                    try {
+                        val userId = topicMessage.payload.split(':')[1].toLong()
+
+                        coroutineScope.launch {
+                            _newUserAdded.emit(
+                                userId
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Log.e("error", e.message.toString())
+                    }
+                },
+                    {
+                        Log.e(TAG, "Error!", it) //обработка ошибок
+                    }
+                )
+        val lifecycleSubscribe = stompClient.lifecycle()
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { lifecycleEvent: LifecycleEvent ->
+                when (lifecycleEvent.type!!) {
+                    LifecycleEvent.Type.OPENED -> Log.d(TAG, "Stomp connection opened")
+                    LifecycleEvent.Type.ERROR -> Log.e(TAG, "Error", lifecycleEvent.exception)
+                    LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT,
+                    LifecycleEvent.Type.CLOSED -> {
+                        Log.d(TAG, "Stomp connection closed")
+                    }
+                }
+            }
+
+        compositeDisposable.add(lifecycleSubscribe)
+        compositeDisposable.add(topicSubscribe)
     }
 
     override fun listenToInvites() {
@@ -207,7 +255,7 @@ class StompWebsocketProviderImpl(
                     coroutineScope.launch {
                         _invitesFlow.emit(inviteId)
                     }
-                }catch (e : Exception){
+                } catch (e: Exception) {
                     Log.e("error", e.message.toString())
                 }
             },
@@ -249,7 +297,7 @@ class StompWebsocketProviderImpl(
                     coroutineScope.launch {
                         _trackFlow.emit(trackId)
                     }
-                }catch (e : Exception){
+                } catch (e: Exception) {
                     Log.e("error", e.message.toString())
                 }
 

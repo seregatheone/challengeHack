@@ -35,6 +35,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pat.project.challengehack.services.audio.handlers.AudioSwitchHandler
@@ -58,6 +59,7 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
+
 
     @Inject
     lateinit var stompWebsocketProviderImpl: Lazy<StompWebsocketProviderImpl>
@@ -87,6 +89,11 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
     }
 
     override var messageFlow: Flow<WebsocketMessageReceivedEntity> = flowOf()
+    override val userListChanges: Flow<Long> by lazy {
+        stompWebsocketProviderImpl.get().newUserAdded.map {
+            it
+        }
+    }
 
     override fun initStompWebsocket() {
         messageFlow = stompWebsocketProvider.messageFlow
@@ -149,6 +156,10 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
             roomId = roomId,
             trackId = trackId
         )
+    }
+
+    override fun newUserAddedListener(roomId: Long) {
+        stompWebsocketProvider.newUserAddedListener(roomId)
     }
 
     override fun listenToInvites() {
@@ -218,6 +229,17 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
         val dataSourceFactory = DefaultHttpDataSource.Factory()
         return HlsMediaSource.Factory(dataSourceFactory)
             .createMediaSource(MediaItem.fromUri(Uri.parse(url)))
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        serviceScope.launch {
+            withContext(Dispatchers.Main) {
+                exoPlayer.also {
+                    it.pause()
+                }
+            }
+        }
+        return super.onUnbind(intent)
     }
 
 

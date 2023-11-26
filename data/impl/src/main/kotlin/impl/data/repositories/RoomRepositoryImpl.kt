@@ -67,7 +67,7 @@ class RoomRepositoryImpl(
 
     override suspend fun joinInRoom(roomId: Long, artifact: String): Entity<RoomAllInfoEntity> {
         return when (val response = safeApiSuspendResult {
-            roomApi.joinInRoom(roomId, artifact)
+            roomApi.joinInRoom(roomId)
         }) {
             is ResponseStatus.Success -> {
                 response.data?.let {
@@ -94,7 +94,27 @@ class RoomRepositoryImpl(
     }
 
     override suspend fun getRoomAllInfoByRoomId(roomId: Long): Entity<RoomAllInfoEntity> {
-        TODO("Not yet implemented")
+        return when (val response = safeApiSuspendResult {
+            roomApi.getRoomInfoById(roomId)
+        }) {
+            is ResponseStatus.Success -> {
+                response.data?.let {
+                    map {
+                        it.asEntity()
+                    }
+                } ?: kotlin.run {
+                    Entity.Error(
+                        "Ошибка парсинга информации пользователя"
+                    )
+                }
+            }
+
+            is ResponseStatus.Error -> {
+                Entity.Error(
+                    response.exception.message ?: ""
+                )
+            }
+        }
     }
 
     override suspend fun getHlsMusicStream(m3u8Url: String): Entity<InputStream> {

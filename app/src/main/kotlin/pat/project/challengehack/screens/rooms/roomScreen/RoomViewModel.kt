@@ -130,35 +130,35 @@ class RoomViewModel @Inject constructor(
         }
     }
 
-    fun createRoom() {
-        viewModelScope.launch {
-            when (val response = roomInteractor.createRoom()) {
-                is Entity.Success -> {
-                    _roomUiState.update { roomUiState ->
-                        roomUiState.copy(
-                            roomDataEntity = RoomAllInfoEntity(
-                                response.data.ownerId,
-                                response.data.tracks,
-                                response.data.messages,
-                                response.data.users,
-                                response.data.isOwner,
-                                response.data.offers,
-                                response.data.artifact,
-                            ),
-                        )
-                    }
-                }
-
-                is Entity.Error -> {
-
-                }
-
-                else -> {
-
-                }
-            }
-        }
-    }
+//    fun createRoom() {
+//        viewModelScope.launch {
+//            when (val response = roomInteractor.createRoom()) {
+//                is Entity.Success -> {
+//                    _roomUiState.update { roomUiState ->
+//                        roomUiState.copy(
+//                            roomDataEntity = RoomAllInfoEntity(
+//                                response.data.ownerId,
+//                                response.data.tracks,
+//                                response.data.messages,
+//                                response.data.users,
+//                                response.data.isOwner,
+//                                response.data.offers,
+//                                response.data.artifact,
+//                            ),
+//                        )
+//                    }
+//                }
+//
+//                is Entity.Error -> {
+//
+//                }
+//
+//                else -> {
+//
+//                }
+//            }
+//        }
+//    }
 
     init {
         viewModelScope.launch {
