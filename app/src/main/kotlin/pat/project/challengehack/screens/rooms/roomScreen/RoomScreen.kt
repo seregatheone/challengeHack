@@ -2,6 +2,7 @@ package pat.project.challengehack.screens.rooms.roomScreen
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -78,8 +79,16 @@ fun RoomScreen(
     onClickBack: () -> Unit,
     artifact: String
 ) {
+//    LaunchedEffect(key1 = Unit){
+//        Log.i("roomIdroomId", roomId.toString())
+//        Log.i("artifact", artifact)
+//    }
+
+    val stompProvider = LocalWebsocketConnector.current
+
     LaunchedEffect(key1 = Unit) {
         viewModel.loadRoom(roomId)
+        stompProvider.newUserAddedListener(roomId)
     }
 
     val roomUiState by viewModel.roomUiState.collectAsState()
@@ -87,7 +96,14 @@ fun RoomScreen(
     val navDirection by viewModel.navDirection.collectAsState()
 
     val sessionManager = LocalSessionManager.current
-    val stompProvider = LocalWebsocketConnector.current
+//
+//    val queue = stompProvider.messageFlow
+
+    val users by stompProvider.userListChanges.collectAsState(initial = 0L)
+
+    LaunchedEffect(key1 = users) {
+        viewModel.getRoomInfoById(roomId)
+    }
 
     var qr by remember {
         mutableStateOf("")
@@ -97,15 +113,14 @@ fun RoomScreen(
 
     LaunchedEffect(key1 = roomUiState.myId) {
         if (roomUiState.myId != null) {
-            if (roomId == roomUiState.myId) {
-                viewModel.createRoom()
+            if (artifact.isNotEmpty() && artifact != "1") {
+                Log.i("artifact", artifact)
+                viewModel.joinInRoom(roomId, artifact)
             } else {
-                if (artifact.isNotEmpty() && artifact != "1") {
-                    viewModel.joinInRoom(roomId, artifact)
-                } else {
-                    viewModel.getRoomInfoById(roomId)
-                }
+                viewModel.getRoomInfoById(roomId)
+                Log.i("artifactartifact", artifact)
             }
+
         }
 
     }
@@ -118,10 +133,8 @@ fun RoomScreen(
 
     LaunchedEffect(key1 = Unit) {
         sessionManager.onSessionScreenReady()
-        viewModel.createRoom()
         stompProvider.subscribeOnTracks(roomId)
         viewModel.getGenreMusicByName("КЛАССИКА")
-
     }
 
 
@@ -406,7 +419,13 @@ fun RoomScreen(
                 ) {
                     if (selectedTab == TabModel.ParticipantsAdvices) {
                         items(roomUiState.soundList) { item ->
-                            OfferItem(item = item, modifier = Modifier)
+                            OfferItem(
+                                item = item,
+                                modifier = Modifier,
+                                addTrackToQueue = {
+                                    stompProvider.addTrackToQueue(roomId, item.trackId)
+                                }
+                            )
                         }
                     } else {
                         items(roomUiState.soundList) { item ->

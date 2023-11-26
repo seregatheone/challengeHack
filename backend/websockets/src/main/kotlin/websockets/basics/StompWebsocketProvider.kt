@@ -8,6 +8,7 @@ interface StompWebsocketProvider {
     val messageFlow: SharedFlow<WebsocketMessageReceivedEntity>
     val invitesFlow : SharedFlow<Long>
     val trackFlow : SharedFlow<Long>
+    val newUserAdded : SharedFlow<Long>
     fun connect()
     fun reconnect()
     fun subscribeOnChat(roomId : Long)
@@ -20,5 +21,9 @@ interface StompWebsocketProvider {
     fun listenToInvites()
 
     fun listenToTracks(roomId : Long)
+
+    fun addTrackToQueue(roomId: Long, trackId : Long)
+    //////
+    fun newUserAddedListener(roomId : Long)
 
 }

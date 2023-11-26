@@ -1,7 +1,7 @@
 package basic.domain.main.models
 
 data class TrackEntity (
-    val trackId : Int,
+    val trackId : Long,
     val name : String,
     val bandName : String,
     val albumId: Int,

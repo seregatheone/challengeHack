@@ -35,7 +35,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pat.project.challengehack.services.audio.handlers.AudioSwitchHandler
 import websockets.basics.StompWebsocketProvider
 import java.io.InputStream
@@ -57,6 +59,7 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
+
 
     @Inject
     lateinit var stompWebsocketProviderImpl: Lazy<StompWebsocketProviderImpl>
@@ -86,6 +89,11 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
     }
 
     override var messageFlow: Flow<WebsocketMessageReceivedEntity> = flowOf()
+    override val userListChanges: Flow<Long> by lazy {
+        stompWebsocketProviderImpl.get().newUserAdded.map {
+            it
+        }
+    }
 
     override fun initStompWebsocket() {
         messageFlow = stompWebsocketProvider.messageFlow
@@ -129,7 +137,7 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
 
         serviceScope.launch {
             stompWebsocketProvider.trackFlow.collectLatest {
-                when(val result = genreInteractor.getTrackById(it)){
+                when (val result = genreInteractor.getTrackById(it)) {
                     is Entity.Success -> {
                         initializeExoPlayer(result.data.trackUrl)
                     }
@@ -141,6 +149,17 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
                 }
             }
         }
+    }
+
+    override fun addTrackToQueue(roomId: Long, trackId: Long) {
+        stompWebsocketProvider.addTrackToQueue(
+            roomId = roomId,
+            trackId = trackId
+        )
+    }
+
+    override fun newUserAddedListener(roomId: Long) {
+        stompWebsocketProvider.newUserAddedListener(roomId)
     }
 
     override fun listenToInvites() {
@@ -180,52 +199,61 @@ class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConne
 //        }
 //    }
 
-    private var exoPlayer: ExoPlayer? = null
-    private val exoPlayerListener by lazy { ExoPlayerListener() }
+    @Inject
+    lateinit var exoPlayer: ExoPlayer
+
+//    private val exoPlayerListener by lazy { ExoPlayerListener() }
 
     private var playPauseState = true
     private var currentWindow = 0
     private var playbackPosition = 0L
 
     private fun initializeExoPlayer(m3u8Url: String) {
-        exoPlayer = ExoPlayer.Builder(this@WebsocketService).build()
-        exoPlayer?.let {
-            val mediaSource = buildMediaSource(m3u8Url)
-            it.setMediaSource(mediaSource)
-            it.playWhenReady = playPauseState
-            it.seekTo(currentWindow, playbackPosition)
-            it.prepare()
+        serviceScope.launch {
+            withContext(Dispatchers.Main) {
+                exoPlayer.also {
+                    val mediaSource = buildMediaSource(m3u8Url)
+                    it.setMediaSource(mediaSource)
+                    it.playWhenReady = playPauseState
+                    it.seekTo(currentWindow, playbackPosition)
+                    it.prepare()
+                }
+            }
         }
+
+
     }
 
     private fun buildMediaSource(url: String): MediaSource {
 
-        // using DefaultHttpDataSourceFactory for http data source
         val dataSourceFactory = DefaultHttpDataSource.Factory()
-
-        // Set a custom authentication request header
-        // dataSourceFactory.setDefaultRequestProperty("Header", "Value")
-
-        // setAllowChunklessPreparation()
-
-        // create HLS Media Source
         return HlsMediaSource.Factory(dataSourceFactory)
-//            .createMediaSource(MediaItem.Builder().build())
             .createMediaSource(MediaItem.fromUri(Uri.parse(url)))
     }
 
-
-    inner class ExoPlayerListener : Player.Listener {
-        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
-
-            exoPlayer?.let {
-                val manifest = it.currentManifest
-                manifest?.let {
-                    val hlsManifest = it as HlsManifest
+    override fun onUnbind(intent: Intent?): Boolean {
+        serviceScope.launch {
+            withContext(Dispatchers.Main) {
+                exoPlayer.also {
+                    it.pause()
                 }
             }
         }
+        return super.onUnbind(intent)
     }
+
+
+//    inner class ExoPlayerListener : Player.Listener {
+//        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+
+//            exoPlayer.let {
+//                val manifest = it.currentManifest
+//                manifest?.let {
+//                    val hlsManifest = it as HlsManifest
+//                }
+//            }
+//        }
+//    }
 
 
 }

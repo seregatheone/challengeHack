@@ -7,4 +7,8 @@ object  RoomStompClientConfig {
     fun getListeningInvitesUrl() = "/app/queue/room/invites"
 
     fun getTrackListeningUrl(roomId: Long) = "/app/queue/room/$roomId/tracks"
+
+    fun getAddToQueueTrack(roomId: Long) = "/app/room/$roomId/tracks/add"
+
+    fun getNewUsersListeningUrl(roomId: Long) = "/app/queue/room/$roomId/users"
 }

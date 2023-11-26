@@ -33,6 +33,7 @@ import pat.project.challengehack.core.ui.R
 fun OfferItem(
     modifier: Modifier = Modifier,
     item: TrackEntity,
+    addTrackToQueue : () -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -91,7 +92,7 @@ fun OfferItem(
                     modifier = Modifier
                         .size(30.dp))
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = addTrackToQueue) {
                 Icon(imageVector = Icons.Default.Done, contentDescription = null,
                     tint = AppResources.colors.White,
                     modifier = Modifier
