@@ -1,0 +1,13 @@
+/build
+/.gradle
+/build/*
+/build/.
+/build/kotlin
+/build/libs
+/build/pluginDescriptors
+/build/pluginUnderTestMetadata
+/build/reports
+/build/snapshot
+/build/source-roots
+/build/tmp
+

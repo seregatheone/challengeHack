@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="user_id">\@%s</string>
+
+    <string name="link_in_room">%s</string>
+    <string name="genre">Жанры</string>
+    <string name="last_rel">Последние релизы</string>
+    <string name="trans">Трансляции</string>
+    <string name="add_user">Добавить пользователя</string>
+    <string name="link_room">Ссылка на комнату</string>
+    <string name="qr_code">QR-код</string>
+
+    <string name="pick_from_gallery">Pick from gallery</string>
+    <string name="take_photo">Take a photo</string>
+
+    <string name="account_settings_category_name">Account settings</string>
+
+    <string name="account_item_name">Account</string>
+    <string name="profile_appearance_item_name">Profile Appearances</string>
+    <string name="friend_requests_item_name">Friend Requests</string>
+
+    <string name="app_settings_category_name">App settings</string>
+
+    <string name="voice_item_name">Voice</string>
+    <string name="language_item_name">Language</string>
+    <string name="notifications_item_name">Friend Requests</string>
+
+    <string name="logout">Log out</string>
+    </resources>
