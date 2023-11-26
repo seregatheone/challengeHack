@@ -20,5 +20,5 @@ data class TrackDto (
     @SerializedName("duration")
     val duration : Int,
     @SerializedName("genre")
-    val published : String,
+    val genre : String,
 )

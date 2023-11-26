@@ -74,14 +74,43 @@ class TrackRepositoryImpl(
         }
     }
 
-    override suspend fun getAlbumMusicById(albumId: Int): Entity<List<AlbumEntity>> {
+    override suspend fun getAlbumMusicById(albumId: Int): Entity<AlbumEntity> {
         return when (val response = safeApiSuspendResult {
             trackApi.getAlbumMusicById(albumId)
         }) {
             is ResponseStatus.Success -> {
                 response.data?.let {
                     map {
-                        it.map { it.asEntity() }
+                        it.asEntity()
+                    }
+                } ?: kotlin.run {
+                    Entity.Error(
+                        "Ошибка парсинга информации пользователя"
+                    )
+                }
+
+            }
+
+            is ResponseStatus.Error -> {
+                Entity.Error(
+                    response.exception.message ?: ""
+                )
+            }
+
+            else -> {
+                Entity.Error()
+            }
+        }
+    }
+
+    override suspend fun getGenreInfo(genreName: String): Entity<GenreEntity> {
+        return when (val response = safeApiSuspendResult {
+            trackApi.getGenreInfo(genreName)
+        }) {
+            is ResponseStatus.Success -> {
+                response.data?.let {
+                    map {
+                        it.asEntity()
                     }
                 } ?: kotlin.run {
                     Entity.Error(

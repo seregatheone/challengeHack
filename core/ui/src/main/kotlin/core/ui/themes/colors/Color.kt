@@ -13,6 +13,8 @@ val Grey80 = Color(0xFF666465)
 val Grey90 = Color(0xFF58595B)
 val Grey90_60 = Color(0x9958595B)
 
+val SystemError = Color(0xFFD86969)
+
 
 
 val MainRed = Color(0xFFFF0032)
