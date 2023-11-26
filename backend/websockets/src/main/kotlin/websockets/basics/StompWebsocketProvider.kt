@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.SharedFlow
 interface StompWebsocketProvider {
     val messageFlow: SharedFlow<WebsocketMessageReceivedEntity>
     val invitesFlow : SharedFlow<Long>
+    val trackFlow : SharedFlow<Long>
     fun connect()
     fun reconnect()
     fun subscribeOnChat(roomId : Long)
@@ -17,5 +18,7 @@ interface StompWebsocketProvider {
     fun acceptOffer(roomId : Long)
     fun declineOffer(roomId : Long)
     fun listenToInvites()
+
+    fun listenToTracks(roomId : Long)
 
 }

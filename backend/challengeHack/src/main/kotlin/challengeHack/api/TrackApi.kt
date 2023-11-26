@@ -33,4 +33,9 @@ interface TrackApi {
     suspend fun getAlbumMusicById(
         @Path("albumId") albumId: Int
     ) : Response<AlbumDto>
+
+    @GET("api/v2/music/track/{trackId}")
+    suspend fun getTrackDataFromId(
+        @Path("trackId") trackId: Long
+    ) : Response<TrackDto>
 }

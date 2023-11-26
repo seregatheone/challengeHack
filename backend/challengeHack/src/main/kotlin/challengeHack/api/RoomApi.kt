@@ -5,6 +5,7 @@ import challengeHack.dto.profile.responses.ProfilesDto
 import challengeHack.dto.rooms.response.RoomFullDataDto
 import challengeHack.dto.rooms.response.RoomsInvitationDtoResponse
 import challengeHack.dto.rooms.response.UserProfileDto
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,4 +32,10 @@ interface RoomApi {
     ): Response<RoomFullDataDto>
 
     suspend fun getAllInvites() : Response<List<RoomsInvitationDtoResponse>>
+
+    @GET("api/v2/music/track/{url}")
+    suspend fun getHlsMusicStream(
+        @Path("url")
+        m3u8Url : String
+    ): Response<ResponseBody>
 }

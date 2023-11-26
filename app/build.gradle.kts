@@ -117,6 +117,7 @@ dependencies {
     implementation ("androidx.core:core-splashscreen:1.0.0")
     //
     implementation(Dependencies.ExoPlayer.lib)
+//    implementation(Dependencies.ExoPlayer.hlsLib)
 
     //module
     implementation(project(":core:ui"))

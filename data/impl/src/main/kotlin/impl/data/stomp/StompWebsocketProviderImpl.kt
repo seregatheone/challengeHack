@@ -38,11 +38,26 @@ class StompWebsocketProviderImpl(
     private val stompClient: StompClient,
     private val compositeDisposable: CompositeDisposable,
 ) : StompWebsocketProvider, WebRtcSocketProvider {
-    private val _messageFlow = MutableSharedFlow<WebsocketMessageReceivedEntity>(replay = 2, extraBufferCapacity = 3, onBufferOverflow = BufferOverflow.DROP_LATEST)
+    private val _messageFlow = MutableSharedFlow<WebsocketMessageReceivedEntity>(
+        replay = 2,
+        extraBufferCapacity = 3,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
     override val messageFlow: SharedFlow<WebsocketMessageReceivedEntity> = _messageFlow
 
-    private val _invitesFlow = MutableSharedFlow<Long>(replay = 2, extraBufferCapacity = 3, onBufferOverflow = BufferOverflow.DROP_LATEST)
+    private val _invitesFlow = MutableSharedFlow<Long>(
+        replay = 2,
+        extraBufferCapacity = 3,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
     override val invitesFlow: SharedFlow<Long> = _invitesFlow
+
+    private val _trackFlow = MutableSharedFlow<Long>(
+        replay = 2,
+        extraBufferCapacity = 3,
+        onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
+    override val trackFlow: SharedFlow<Long> = _trackFlow
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -65,7 +80,7 @@ class StompWebsocketProviderImpl(
     }
 
     override fun reconnect() {
-        if(!stompClient.isConnected){
+        if (!stompClient.isConnected) {
             stompClient.connect()
             websocketState = WebSocketState.Connected
         }
@@ -125,13 +140,14 @@ class StompWebsocketProviderImpl(
             )
         )
     }
+
     private fun sendCompletable(request: Completable) {
         compositeDisposable.add(
             request.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        Log.i("requestrequest",request.toString())
+                        Log.i("requestrequest", request.toString())
                         Log.d(TAG, "Stomp sended")
 //                        coroutineScope.launch {
 //                            _messageFlow.emit(WebSocketState.)
@@ -147,7 +163,7 @@ class StompWebsocketProviderImpl(
     }
 
     override fun disconnect() {
-        if(stompClient.isConnected){
+        if (stompClient.isConnected) {
             stompClient.disconnect()
         }
     }
@@ -176,12 +192,57 @@ class StompWebsocketProviderImpl(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ topicMessage: StompMessage ->
                 Log.i(TAG, topicMessage.payload)
-                val message: WebsocketMessageReceivedDto =
-                    gson.fromJson(topicMessage.payload, WebsocketMessageReceivedDto::class.java)
+                try {
+                    val inviteId = topicMessage.payload.split(':')[1].toLong()
 
-                coroutineScope.launch {
-                    _messageFlow.emit(message.toEntity())
+                    coroutineScope.launch {
+                        _invitesFlow.emit(inviteId)
+                    }
+                }catch (e : Exception){
+                    Log.e("error", e.message.toString())
                 }
+            },
+                {
+                    Log.e(TAG, "Error!", it) //обработка ошибок
+                }
+            )
+
+        //подписываемся на состояние WebSocket'a
+        val lifecycleSubscribe = stompClient.lifecycle()
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { lifecycleEvent: LifecycleEvent ->
+                when (lifecycleEvent.type!!) {
+                    LifecycleEvent.Type.OPENED -> Log.d(TAG, "Stomp connection opened")
+                    LifecycleEvent.Type.ERROR -> Log.e(TAG, "Error", lifecycleEvent.exception)
+                    LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT,
+                    LifecycleEvent.Type.CLOSED -> {
+                        Log.d(TAG, "Stomp connection closed")
+                    }
+                }
+            }
+
+        compositeDisposable.add(lifecycleSubscribe)
+        compositeDisposable.add(topicSubscribe)
+    }
+
+    override fun listenToTracks(roomId: Long) {
+        val topicSubscribe = stompClient.topic(RoomStompClientConfig.getListeningInvitesUrl())
+            .subscribeOn(Schedulers.io(), false)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ topicMessage: StompMessage ->
+                Log.i(TAG, topicMessage.payload)
+
+                try {
+                    val trackId = topicMessage.payload.split(':')[1].toLong()
+
+                    coroutineScope.launch {
+                        _trackFlow.emit(trackId)
+                    }
+                }catch (e : Exception){
+                    Log.e("error", e.message.toString())
+                }
+
             },
                 {
                     Log.e(TAG, "Error!", it) //обработка ошибок
@@ -217,7 +278,7 @@ class StompWebsocketProviderImpl(
 
     private val _signalingCommandFlow = MutableSharedFlow<Pair<SignalingCommand, String>>()
     override val signalingCommandFlow = _signalingCommandFlow.asSharedFlow()
-    override fun connectWebRtc(roomId : Long) {
+    override fun connectWebRtc(roomId: Long) {
 //        if(connectedRooms.size > 1)){
 //            disconnectWebRtc()
 //        }
@@ -257,10 +318,13 @@ class StompWebsocketProviderImpl(
         when {
             text.startsWith(SignalingCommand.STATE.toString(), true) ->
                 handleStateMessage(text)
+
             text.startsWith(SignalingCommand.OFFER.toString(), true) ->
                 handleSignalingCommand(SignalingCommand.OFFER, text)
+
             text.startsWith(SignalingCommand.ANSWER.toString(), true) ->
                 handleSignalingCommand(SignalingCommand.ANSWER, text)
+
             text.startsWith(SignalingCommand.ICE.toString(), true) ->
                 handleSignalingCommand(SignalingCommand.ICE, text)
         }
@@ -281,7 +345,7 @@ class StompWebsocketProviderImpl(
     private fun getSeparatedMessage(text: String) = text.substringAfter(' ')
 
     override fun sendCommand(signalingCommand: SignalingCommand, message: String) {
-        if(connectedRooms.isNotEmpty()){
+        if (connectedRooms.isNotEmpty()) {
             sendCompletable(
                 stompClient.send(
                     WebRtcClient.getWebRtcSendingUrl(connectedRooms.first()),

@@ -161,4 +161,33 @@ class TrackRepositoryImpl(
         }
     }
 
+    override suspend fun getTrackById(trackId: Long): Entity<TrackEntity> {
+        return when (val response = safeApiSuspendResult {
+            trackApi.getTrackDataFromId(trackId)
+        }) {
+            is ResponseStatus.Success -> {
+                response.data?.let {
+                    map {
+                        it.asEntity()
+                    }
+                } ?: kotlin.run {
+                    Entity.Error(
+                        "Ошибка парсинга информации пользователя"
+                    )
+                }
+
+            }
+
+            is ResponseStatus.Error -> {
+                Entity.Error(
+                    response.exception.message ?: ""
+                )
+            }
+
+            else -> {
+                Entity.Error()
+            }
+        }
+    }
+
 }

@@ -58,6 +58,7 @@ import core.ui.components.listItems.QueueItem
 import core.ui.components.listItems.TrackItem
 import core.ui.themes.AppResources
 import pat.project.challengehack.LocalSessionManager
+import pat.project.challengehack.LocalWebsocketConnector
 import pat.project.challengehack.R
 import pat.project.challengehack.navigation.Screens.Companion.ARTIFACT
 import pat.project.challengehack.navigation.Screens.Companion.ROOM_ID
@@ -86,6 +87,7 @@ fun RoomScreen(
     val navDirection by viewModel.navDirection.collectAsState()
 
     val sessionManager = LocalSessionManager.current
+    val stompProvider = LocalWebsocketConnector.current
 
     var qr by remember {
         mutableStateOf("")
@@ -116,6 +118,8 @@ fun RoomScreen(
 
     LaunchedEffect(key1 = Unit) {
         sessionManager.onSessionScreenReady()
+        viewModel.createRoom()
+        stompProvider.subscribeOnTracks(roomId)
         viewModel.getGenreMusicByName("КЛАССИКА")
 
     }

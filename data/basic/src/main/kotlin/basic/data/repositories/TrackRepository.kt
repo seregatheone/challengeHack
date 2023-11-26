@@ -13,4 +13,6 @@ interface TrackRepository {
     suspend fun getGenreInfo(genreName: String) : Entity<GenreEntity>
 
     suspend fun getGenreMusicByName(genreName: String): Entity<List<TrackEntity>>
+
+    suspend fun getTrackById(trackId : Long) : Entity<TrackEntity>
 }

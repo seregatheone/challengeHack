@@ -19,4 +19,8 @@ class GenreInteractorImpl(
         return trackRepository.getGenreInfo(genreName)
     }
 
+    override suspend fun getTrackById(trackId: Long): Entity<TrackEntity> {
+        return trackRepository.getTrackById(trackId)
+    }
+
 }

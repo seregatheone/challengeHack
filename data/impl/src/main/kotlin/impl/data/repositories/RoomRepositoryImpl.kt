@@ -11,6 +11,7 @@ import challengeHack.dto.profile.request.ProfileIdsDto
 import common.domain.entity.Entity
 import impl.data.base.BaseRepository
 import impl.data.mappers.asEntity
+import java.io.InputStream
 
 class RoomRepositoryImpl(
     private val roomApi: RoomApi
@@ -95,6 +96,31 @@ class RoomRepositoryImpl(
     override suspend fun getRoomAllInfoByRoomId(roomId: Long): Entity<RoomAllInfoEntity> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun getHlsMusicStream(m3u8Url: String): Entity<InputStream> {
+        return when (val response = safeApiSuspendResult {
+            roomApi.getHlsMusicStream(m3u8Url)
+        }) {
+            is ResponseStatus.Success -> {
+                response.data?.let {
+                    map {
+                        it.byteStream()
+                    }
+                } ?: kotlin.run {
+                    Entity.Error(
+                        "Ошибка парсинга информации пользователя"
+                    )
+                }
+            }
+
+            is ResponseStatus.Error -> {
+                Entity.Error(
+                    response.exception.message ?: ""
+                )
+            }
+        }
+    }
+
 
     companion object{
         val TAG = RoomRepositoryImpl::class.toString()
