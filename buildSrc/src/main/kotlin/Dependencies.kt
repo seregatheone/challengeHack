@@ -141,6 +141,11 @@ object Dependencies {
         const val serializationConverterLib = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$serializationConverterVersion"
     }
 
+    object ExoPlayer{
+        val version = "2.19.1"
+        val lib = "com.google.android.exoplayer:exoplayer:$version"
+    }
+
     object Testing{
 
         //UNIT TESTING

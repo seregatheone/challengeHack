@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pat.project.challengehack.screens.chats.chatBasics.models.WebsocketMessageUI
+import utils.time.toLocalDatetime
 import utils.time.toSendMessagesDto
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -37,8 +38,6 @@ class GroupChatViewModel @Inject constructor(
     val messageFromSocketLocal = _messageFromSocketLocal.asStateFlow()
 
     init {
-
-
         viewModelScope.launch {
             stompWebsocketProvider.collectLatest { stompWebsocketProvider ->
                 stompWebsocketProvider?.let {
@@ -46,7 +45,7 @@ class GroupChatViewModel @Inject constructor(
                         uiState.value.myId?.let { myId ->
                             _messageFromSocketLocal.update { messageFromSocketLocalOld ->
                                 messageFromSocketLocalOld + WebsocketMessageUI(
-                                    messageTime = LocalDateTime.now(),
+                                    messageTime = message.sendTime.toLocalDatetime(),
                                     messageIsMine = message.senderId == myId,
                                     messageText = message.text
                                 )
@@ -56,6 +55,22 @@ class GroupChatViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun setRoomId(roomId: Long) {
+        _uiState.update {
+            it.copy(
+                roomId = roomId
+            )
+        }
+    }
+
+    fun setMineId(mineId: Long) {
+        _uiState.update {
+            it.copy(
+                myId = mineId
+            )
         }
     }
 

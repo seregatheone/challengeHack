@@ -6,7 +6,9 @@ import android.hardware.camera2.CameraManager
 import android.hardware.camera2.CameraMetadata
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.media.MediaRecorder
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import basic.data.webRtc.AudioHandler
 import basic.domain.webrtc.SignalingCommand
@@ -34,6 +36,7 @@ import org.webrtc.SessionDescription
 import org.webrtc.SurfaceTextureHelper
 import org.webrtc.VideoCapturer
 import org.webrtc.VideoTrack
+import java.io.File
 import java.util.UUID
 
 private const val ICE_SEPARATOR = '$'
@@ -69,30 +72,30 @@ class WebRtcSessionManagerImpl(
 
     // getting front camera
 //    private val videoCapturer: VideoCapturer by lazy { buildCameraCapturer() }
-    private val cameraManager by lazy { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
-    private val cameraEnumerator: Camera2Enumerator by lazy {
-        Camera2Enumerator(context)
-    }
+//    private val cameraManager by lazy { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
+//    private val cameraEnumerator: Camera2Enumerator by lazy {
+//        Camera2Enumerator(context)
+//    }
 
     private var connectionTracks = mutableListOf<RtpTransceiver>()
     private var added = false
 
-    private val resolution: CameraEnumerationAndroid.CaptureFormat
-        get() {
-            val frontCamera = cameraEnumerator.deviceNames.first { cameraName ->
-                cameraEnumerator.isFrontFacing(cameraName)
-            }
-            val supportedFormats = cameraEnumerator.getSupportedFormats(frontCamera) ?: emptyList()
-            return supportedFormats.firstOrNull {
-                (it.width == 720 || it.width == 480 || it.width == 360 || it.width == 320 || it.width == 640 || it.width == 1280)
-            } ?: error("There is no matched resolution!")
-        }
+//    private val resolution: CameraEnumerationAndroid.CaptureFormat
+//        get() {
+//            val frontCamera = cameraEnumerator.deviceNames.first { cameraName ->
+//                cameraEnumerator.isFrontFacing(cameraName)
+//            }
+//            val supportedFormats = cameraEnumerator.getSupportedFormats(frontCamera) ?: emptyList()
+//            return supportedFormats.firstOrNull {
+//                (it.width == 720 || it.width == 480 || it.width == 360 || it.width == 320 || it.width == 640 || it.width == 1280)
+//            } ?: error("There is no matched resolution!")
+//        }
 
     // we need it to initialize video capturer
-    private val surfaceTextureHelper = SurfaceTextureHelper.create(
-        "SurfaceTextureHelperThread",
-        peerConnectionFactory.eglBaseContext
-    )
+//    private val surfaceTextureHelper = SurfaceTextureHelper.create(
+//        "SurfaceTextureHelperThread",
+//        peerConnectionFactory.eglBaseContext
+//    )
 
 //    private val videoSource by lazy {
 //        peerConnectionFactory.makeVideoSource(videoCapturer.isScreencast).apply {
@@ -122,10 +125,12 @@ class WebRtcSessionManagerImpl(
     }
 
     private val localAudioTrack: AudioTrack by lazy {
-        peerConnectionFactory.makeAudioTrack(
+        val audioTrack = peerConnectionFactory.makeAudioTrack(
             source = audioSource,
             trackId = "Audio${UUID.randomUUID()}"
         )
+        audioTrack.setEnabled(true)
+        audioTrack
     }
 
     private var offer: String? = null
@@ -142,7 +147,22 @@ class WebRtcSessionManagerImpl(
                     "${iceCandidate.sdpMid}$ICE_SEPARATOR${iceCandidate.sdpMLineIndex}$ICE_SEPARATOR${iceCandidate.sdp}"
                 )
             },
-            onVideoTrack = { rtpTransceiver ->
+            onStreamAdded = { mediaStream ->
+                val audio = mediaStream.audioTracks.firstOrNull()
+//                audio?.let{
+//                    mediaRecorder.setAudioSource(audioSource)
+//                    mediaRecorder.start()
+//                }
+
+            }
+//            onVideoTrack = { rtpTransceiver ->
+//                val track = rtpTransceiver?.receiver?.track() ?: return@makePeerConnection
+//                if (track.kind() == MediaStreamTrack.VIDEO_TRACK_KIND) {
+//                    val audioTrack = track as VideoTrack
+//                    sessionManagerScope.launch {
+//                        _remoteVideoTrackFlow.emit(videoTrack)
+//                    }
+//                }
 //                val track = rtpTransceiver?.receiver?.track() ?: return@makePeerConnection
 //                connectionTracks.add(rtpTransceiver)
 //                if (track.kind() == MediaStreamTrack.VIDEO_TRACK_KIND) {
@@ -151,7 +171,7 @@ class WebRtcSessionManagerImpl(
 //                        _remoteVideoTrackFlow.emit(videoTrack)
 //                    }
 //                }
-            }
+//            }
         )
     }
 
@@ -170,7 +190,7 @@ class WebRtcSessionManagerImpl(
 
     override fun onSessionScreenReady() {
         setupAudio()
-        if(!added){
+        if (!added) {
 //            peerConnection.connection.addTrack(localVideoTrack)
             peerConnection.connection.addTrack(localAudioTrack)
             added = true
@@ -281,29 +301,29 @@ class WebRtcSessionManagerImpl(
         )
     }
 
-    private fun buildCameraCapturer(): VideoCapturer {
-        val manager = cameraManager ?: throw RuntimeException("CameraManager was not initialized!")
-
-        val ids = manager.cameraIdList
-        var foundCamera = false
-        var cameraId = ""
-
-        for (id in ids) {
-            val characteristics = manager.getCameraCharacteristics(id)
-            val cameraLensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
-
-            if (cameraLensFacing == CameraMetadata.LENS_FACING_FRONT) {
-                foundCamera = true
-                cameraId = id
-            }
-        }
-
-        if (!foundCamera && ids.isNotEmpty()) {
-            cameraId = ids.first()
-        }
-
-        return Camera2Capturer(context, cameraId, null)
-    }
+//    private fun buildCameraCapturer(): VideoCapturer {
+//        val manager = cameraManager ?: throw RuntimeException("CameraManager was not initialized!")
+//
+//        val ids = manager.cameraIdList
+//        var foundCamera = false
+//        var cameraId = ""
+//
+//        for (id in ids) {
+//            val characteristics = manager.getCameraCharacteristics(id)
+//            val cameraLensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
+//
+//            if (cameraLensFacing == CameraMetadata.LENS_FACING_FRONT) {
+//                foundCamera = true
+//                cameraId = id
+//            }
+//        }
+//
+//        if (!foundCamera && ids.isNotEmpty()) {
+//            cameraId = ids.first()
+//        }
+//
+//        return Camera2Capturer(context, cameraId, null)
+//    }
 
     private fun buildAudioConstraints(): MediaConstraints {
         val mediaConstraints = MediaConstraints()
@@ -342,8 +362,8 @@ class WebRtcSessionManagerImpl(
         logger.d { "[setupAudio] #sfu; no args" }
         audioHandler.start()
         audioManager?.mode = AudioManager.MODE_IN_COMMUNICATION
-//        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0)
-//        audioManager.isSpeakerphoneOn = true
+//        audioManager?.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audioManager?.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)?:0, 0)
+        audioManager?.isSpeakerphoneOn = true
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val devices = audioManager?.availableCommunicationDevices ?: return

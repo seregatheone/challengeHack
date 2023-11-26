@@ -1,6 +1,7 @@
 package impl.data.webRtc
 
 import android.content.Context
+import android.media.MediaRecorder
 import android.os.Build
 import basic.domain.webrtc.StreamPeerType
 import io.getstream.log.taggedLogger
@@ -29,7 +30,7 @@ class StreamPeerConnectionFactory constructor(
     private val webRtcLogger by taggedLogger("Call:WebRTC")
     private val audioLogger by taggedLogger("Call:AudioTrackCallback")
 
-    val eglBaseContext: EglBase.Context by lazy {
+    private val eglBaseContext: EglBase.Context by lazy {
         EglBase.create().eglBaseContext
     }
 
@@ -92,8 +93,8 @@ class StreamPeerConnectionFactory constructor(
         )
 
         PeerConnectionFactory.builder()
-            .setVideoDecoderFactory(videoDecoderFactory)
-            .setVideoEncoderFactory(videoEncoderFactory)
+//            .setVideoDecoderFactory(videoDecoderFactory)
+//            .setVideoEncoderFactory(videoEncoderFactory)
             .setAudioDeviceModule(
                 JavaAudioDeviceModule
                     .builder(context)
@@ -229,8 +230,8 @@ class StreamPeerConnectionFactory constructor(
      * @param isScreencast If we're screen sharing using this source.
      * @return [VideoSource] that can be used to build tracks.
      */
-    fun makeVideoSource(isScreencast: Boolean): VideoSource =
-        factory.createVideoSource(isScreencast)
+//    fun makeVideoSource(isScreencast: Boolean): VideoSource =
+//        factory.createVideoSource(isScreencast)
 
     /**
      * Builds a [VideoTrack] from the [factory] that can be used for regular video share (camera)
@@ -240,10 +241,10 @@ class StreamPeerConnectionFactory constructor(
      * @param trackId The unique ID for this track.
      * @return [VideoTrack] That represents a video feed.
      */
-    fun makeVideoTrack(
-        source: VideoSource,
-        trackId: String
-    ): VideoTrack = factory.createVideoTrack(trackId, source)
+//    fun makeVideoTrack(
+//        source: VideoSource,
+//        trackId: String
+//    ): VideoTrack = factory.createVideoTrack(trackId, source)
 
     /**
      * Builds an [AudioSource] from the [factory] that can be used for audio sharing.

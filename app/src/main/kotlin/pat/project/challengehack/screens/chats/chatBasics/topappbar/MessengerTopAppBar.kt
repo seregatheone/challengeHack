@@ -42,6 +42,11 @@ fun MessengerTopAppBar(
             tint = AppResources.colors.White,
             modifier = Modifier
                 .align(Alignment.CenterStart)
+                .clickable (
+                    indication = null,
+                    interactionSource = MutableInteractionSource(),
+                    onClick = onBackPressed
+                )
         )
 
         Icon(
@@ -50,11 +55,7 @@ fun MessengerTopAppBar(
             tint = AppResources.colors.White,
             modifier = Modifier
                 .align(Alignment.Center)
-                .clickable (
-                    indication = null,
-                    interactionSource = MutableInteractionSource(),
-                    onClick = onBackPressed
-                )
+
         )
     }
 }
