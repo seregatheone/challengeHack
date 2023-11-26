@@ -2,6 +2,7 @@ package pat.project.challengehack.screens.rooms.roomScreen
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -25,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,8 +36,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,11 +49,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
+import com.journeyapps.barcodescanner.BarcodeEncoder
+import com.simonsickle.compose.barcodes.Barcode
+import com.simonsickle.compose.barcodes.BarcodeType
 import core.ui.themes.AppResources
 import pat.project.challengehack.LocalSessionManager
+import pat.project.challengehack.R
+import pat.project.challengehack.navigation.Screens.Companion.ARTIFACT
+import pat.project.challengehack.navigation.Screens.Companion.ROOM_ID
 import pat.project.challengehack.screens.rooms.roomScreen.components.AddParticipantIcon
 import pat.project.challengehack.screens.rooms.roomScreen.components.ParticipantImageAndName
 import pat.project.challengehack.screens.rooms.roomScreen.components.RoomBottomBar
+import pat.project.challengehack.screens.rooms.roomScreen.models.RoomNavDirection
 import pat.project.challengehack.screens.rooms.roomScreen.models.TabModel
 
 
@@ -57,7 +71,8 @@ fun RoomScreen(
     viewModel: RoomViewModel = hiltViewModel(),
     roomId: Long,
     navigateToChat: (Long) -> Unit,
-    onClickBack: () -> Unit
+    onClickBack: () -> Unit,
+    artifact: String
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.loadRoom(roomId)
@@ -65,14 +80,34 @@ fun RoomScreen(
 
     val roomUiState by viewModel.roomUiState.collectAsState()
     val callUiState by viewModel.callUiState.collectAsState()
+    val navDirection by viewModel.navDirection.collectAsState()
 
     val sessionManager = LocalSessionManager.current
 
-    val Qr: Bitmap
+    var qr by remember {
+        mutableStateOf("")
+    }
+
 
     LaunchedEffect(key1 = Unit) {
+        if (artifact.isNotEmpty() && artifact != "1"){
+            viewModel.joinInRoom(roomId, artifact)
+        }
         sessionManager.onSessionScreenReady()
+        viewModel.createRoom()
 
+    }
+
+    LaunchedEffect(key1 = roomUiState){
+        qr = roomUiState.roomDataEntity?.artifact ?: "HUI"
+    }
+
+    LaunchedEffect(key1 = navDirection){
+        when(navDirection){
+            RoomNavDirection.PopBackStack -> onClickBack()
+            RoomNavDirection.Default -> {
+            }
+        }
     }
 
     val tabsList by remember {
@@ -89,6 +124,8 @@ fun RoomScreen(
             tabsList.firstOrNull()
         )
     }
+
+    val clipboardManager = LocalClipboardManager.current
 
     var isDialogVisible by remember {
         mutableStateOf(false)
@@ -190,6 +227,9 @@ fun RoomScreen(
                                 contentDescription = null,
                                 tint = AppResources.colors.White,
                                 modifier = Modifier
+                                    .clickable {
+                                        isDialogVisible = !isDialogVisible
+                                    }
                             )
                         }
 
@@ -208,16 +248,21 @@ fun RoomScreen(
                                     AppResources.colors.Black,
                                     shape = RoundedCornerShape(8.dp)
                                 )
+                                .clickable {
+                                    clipboardManager.setText(AnnotatedString("http://300notes/room/join/$roomId-${roomUiState.roomDataEntity?.artifact}"))
+                                }
                                 .fillMaxWidth()
                                 .padding(10.dp)
                         ) {
                             Text(
-                                text = stringResource(id = pat.project.challengehack.R.string.link_in_room, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUR0LrRiNGB0Lsg0LrRidC00LQ%3D"),
+                                text = stringResource(id = R.string.link_in_room, "http://300notes/room/join/$roomId-${roomUiState.roomDataEntity?.artifact}"),
                                 style = AppResources.typography.titles.title1,
                                 color = AppResources.colors.White,
                                 textAlign = TextAlign.Center,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .weight(1f)
 
                                 )
                             Icon(
@@ -234,7 +279,7 @@ fun RoomScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = stringResource(id = pat.project.challengehack.R.string.qr_code),
+                                text = stringResource(id = R.string.qr_code),
                                 style = AppResources.typography.titles.title1,
                                 color = AppResources.colors.White,
                                 textAlign = TextAlign.Center,
@@ -247,7 +292,18 @@ fun RoomScreen(
                                 modifier = Modifier
                             )
                         }
-//                        Image(bitmap = , contentDescription = )
+
+                        if (BarcodeType.QR_CODE.isValueValid(qr)) {
+                            Barcode(
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .width(150.dp)
+                                    .height(150.dp),
+                                resolutionFactor = 10, // Optionally, increase the resolution of the generated image
+                                type = BarcodeType.QR_CODE, // pick the type of barcode you want to render
+                                value = qr // The textual representation of this code
+                            )
+                        }
 
                     }
                 }
@@ -314,21 +370,6 @@ fun RoomScreen(
                 LazyColumn(modifier = Modifier.padding(top = 12.dp)) {
 
                 }
-            }
-        }
-    }
-}
-
-
-
-fun getQrCodeBitmap(text: String): Bitmap {
-    val size = 170 //pixels
-    val qrCodeContent = text
-    val bits = QRCodeWriter().encode(qrCodeContent, BarcodeFormat.QR_CODE, size, size)
-    return Bitmap.createBitmap(size, size, Bitmap.Config.RGB_565).also {
-        for (x in 0 until size) {
-            for (y in 0 until size) {
-                it.setPixel(x, y, if (bits[x, y]) Color.BLACK else Color.WHITE)
             }
         }
     }

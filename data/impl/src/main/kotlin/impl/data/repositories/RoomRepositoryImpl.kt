@@ -37,6 +37,30 @@ class RoomRepositoryImpl(
         }
     }
 
+    override suspend fun joinInRoom(roomId: Long, artifact: String): Entity<RoomAllInfoEntity> {
+        return when (val response = safeApiSuspendResult {
+            roomApi.joinInRoom(roomId, artifact)
+        }) {
+            is ResponseStatus.Success -> {
+                response.data?.let {
+                    map {
+                        it.asEntity()
+                    }
+                } ?: kotlin.run {
+                    Entity.Error(
+                        "Ошибка парсинга информации пользователя"
+                    )
+                }
+            }
+
+            is ResponseStatus.Error -> {
+                Entity.Error(
+                    response.exception.message ?: ""
+                )
+            }
+        }
+    }
+
     override suspend fun getAllInvites(): Entity<List<RoomsInvitationEntity>> {
         TODO("Not yet implemented")
     }

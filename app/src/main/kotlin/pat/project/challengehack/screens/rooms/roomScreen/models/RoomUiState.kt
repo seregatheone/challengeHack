@@ -7,6 +7,5 @@ data class RoomUiState (
     val roomDataEntity : RoomAllInfoEntity? = null,
     val roomParticipantsFullDataEntity: List<ParticipantInfoEntity> = emptyList(),
     val myId : Long? = null,
-    val textQr: String = "zalupa",
 
 )
