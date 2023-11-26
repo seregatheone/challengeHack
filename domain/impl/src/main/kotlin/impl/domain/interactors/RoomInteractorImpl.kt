@@ -2,8 +2,10 @@ package impl.domain.interactors
 
 import basic.data.repositories.RoomRepository
 import basic.domain.room.interactors.RoomInteractor
+import basic.domain.room.models.ProfilesEntity
 import basic.domain.room.models.RoomAllInfoEntity
 import basic.domain.room.models.RoomsInvitationEntity
+import basic.domain.room.models.UserProfileEntity
 import common.domain.entity.Entity
 import java.io.InputStream
 
@@ -16,6 +18,10 @@ class RoomInteractorImpl(
 
     override suspend fun joinInRoom(roomId: Long, artifact: String): Entity<RoomAllInfoEntity> {
         return roomRepository.joinInRoom(roomId,artifact)
+    }
+
+    override suspend fun getUsersById(ids: List<Long>): Entity<ProfilesEntity> {
+        return roomRepository.getUsersById(ids)
     }
 
     override suspend fun getRoomAllInfoByRoomId(roomId: Long): Entity<RoomAllInfoEntity> {

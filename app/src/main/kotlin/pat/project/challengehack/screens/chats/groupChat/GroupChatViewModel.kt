@@ -47,7 +47,8 @@ class GroupChatViewModel @Inject constructor(
                                 messageFromSocketLocalOld + WebsocketMessageUI(
                                     messageTime = message.sendTime.toLocalDatetime(),
                                     messageIsMine = message.senderId == myId,
-                                    messageText = message.text
+                                    messageText = message.text,
+                                    messagePhoto = message.senderUrl
                                 )
                             }
                         }
@@ -73,12 +74,6 @@ class GroupChatViewModel @Inject constructor(
             )
         }
     }
-
-//    fun getRoomInfoById(roomId : Long){
-//        viewModelScope.launch {
-//            roomInteractor.getRoomAllInfoByRoomId(roomId)
-//        }
-//    }
 
     fun setWebsocketConnector(
         websocketStompDataConnector: WebsocketStompDataConnector,

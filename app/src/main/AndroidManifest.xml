@@ -40,7 +40,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.ChallengeHack"
+            android:theme="@style/Theme.ChallengeHackSplashscreen"
             android:windowSoftInputMode="adjustResize"
             android:launchMode="singleTask">
             <intent-filter>

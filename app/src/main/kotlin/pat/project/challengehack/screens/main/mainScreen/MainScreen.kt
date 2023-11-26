@@ -47,9 +47,6 @@ fun MainScreen(
         viewModel.getGenreList()
     }
 
-
-    val translationList = viewModel.translationList
-
     Scaffold(modifier = Modifier,
         topBar = {
             Row(modifier = Modifier
@@ -109,7 +106,7 @@ fun MainScreen(
                     .padding(top  =18.dp))
             LazyRow(modifier = Modifier
                 .padding(top  =12.dp)){
-                items(translationList){
+                items(mainUiState.transList){
                         item ->
                     TransItem(item = item,
                         onClick = {})

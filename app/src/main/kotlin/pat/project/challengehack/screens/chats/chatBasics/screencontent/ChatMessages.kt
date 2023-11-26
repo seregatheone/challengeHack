@@ -74,7 +74,7 @@ fun ChatMessages(
                                     chatMessage = ChatMessage.MyMessage(
                                         messageDate = currentMessage.sendTimestamp.toLocalDatetime(),
                                         messageBody = currentMessage.content,
-                                        photoUrl = ""
+                                        photoUrl = currentMessage.senderPictureUrl
                                     ),
                                 )
                             }
@@ -86,7 +86,7 @@ fun ChatMessages(
                                     chatMessage = ChatMessage.InterlocutorMessage(
                                         messageDate = currentMessage.sendTimestamp.toLocalDatetime(),
                                         messageBody = currentMessage.content,
-                                        ""
+                                        photoUrl = currentMessage.senderPictureUrl
                                     ),
                                 )
                             }

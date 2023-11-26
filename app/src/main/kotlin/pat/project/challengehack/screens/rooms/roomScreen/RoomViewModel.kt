@@ -2,6 +2,8 @@ package pat.project.challengehack.screens.rooms.roomScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import basic.domain.genre.interactors.GenreInteractor
+import basic.domain.main.interactors.MainIntercator
 import basic.domain.profile.interactors.ProfileInteractor
 import basic.domain.room.interactors.RoomInteractor
 import basic.domain.room.models.RoomAllInfoEntity
@@ -18,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RoomViewModel @Inject constructor(
+    private val genreInteractor: GenreInteractor,
     private val roomInteractor: RoomInteractor,
     private val profileInteractor: ProfileInteractor
 ) : ViewModel() {
@@ -31,6 +34,71 @@ class RoomViewModel @Inject constructor(
     private val _navDirection = MutableStateFlow<RoomNavDirection>(RoomNavDirection.Default)
     val navDirection = _navDirection.asStateFlow()
 
+    fun getGenreMusicByName(genreName: String) {
+        viewModelScope.launch {
+            when (val response = genreInteractor.getGenreMusicByName(genreName)) {
+                is Entity.Success -> {
+                    _roomUiState.update { roomUiState ->
+                        roomUiState.copy(
+                            soundList = response.data
+                        )
+                    }
+                }
+                is Entity.Error -> {
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    fun getUsersById(ids: List<Long>) {
+        viewModelScope.launch {
+            when (val response = roomInteractor.getUsersById(ids)) {
+                is Entity.Success -> {
+                    _roomUiState.update { roomUiState ->
+                        roomUiState.copy(
+                            roomParticipantsFullDataEntity = response.data.profiles
+                        )
+                    }
+                }
+                is Entity.Error -> {
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    fun getRoomInfoById(roomId : Long){
+        viewModelScope.launch {
+            when (val response = roomInteractor.getRoomAllInfoByRoomId(roomId)) {
+                is Entity.Success -> {
+                    _roomUiState.update { roomUiState ->
+                        roomUiState.copy(
+                            roomDataEntity = RoomAllInfoEntity(
+                                response.data.ownerId,
+                                response.data.tracks,
+                                response.data.messages,
+                                response.data.users,
+                                response.data.isOwner,
+                                response.data.offers,
+                                response.data.artifact,
+                            ),
+                        )
+                    }
+                }
+
+                is Entity.Error -> {
+
+                }
+
+                else -> {
+
+                }
+            }
+        }
+    }
 
     fun joinInRoom(roomId: Long, artifact: String) {
         viewModelScope.launch {

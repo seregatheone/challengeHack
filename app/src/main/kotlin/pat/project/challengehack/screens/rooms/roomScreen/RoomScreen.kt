@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -52,6 +53,9 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.simonsickle.compose.barcodes.Barcode
 import com.simonsickle.compose.barcodes.BarcodeType
+import core.ui.components.listItems.OfferItem
+import core.ui.components.listItems.QueueItem
+import core.ui.components.listItems.TrackItem
 import core.ui.themes.AppResources
 import pat.project.challengehack.LocalSessionManager
 import pat.project.challengehack.LocalWebsocketConnector
@@ -63,7 +67,6 @@ import pat.project.challengehack.screens.rooms.roomScreen.components.Participant
 import pat.project.challengehack.screens.rooms.roomScreen.components.RoomBottomBar
 import pat.project.challengehack.screens.rooms.roomScreen.models.RoomNavDirection
 import pat.project.challengehack.screens.rooms.roomScreen.models.TabModel
-
 
 
 @Composable
@@ -91,22 +94,44 @@ fun RoomScreen(
     }
 
 
-    LaunchedEffect(key1 = Unit) {
-        if (artifact.isNotEmpty() && artifact != "1"){
-            viewModel.joinInRoom(roomId, artifact)
+
+    LaunchedEffect(key1 = roomUiState.myId) {
+        if (roomUiState.myId != null) {
+            if (roomId == roomUiState.myId) {
+                viewModel.createRoom()
+            } else {
+                if (artifact.isNotEmpty() && artifact != "1") {
+                    viewModel.joinInRoom(roomId, artifact)
+                } else {
+                    viewModel.getRoomInfoById(roomId)
+                }
+            }
         }
+
+    }
+
+    LaunchedEffect(key1 = roomUiState.roomDataEntity) {
+        roomUiState.roomDataEntity?.let {
+            viewModel.getUsersById(roomUiState.roomDataEntity!!.users)
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
         sessionManager.onSessionScreenReady()
         viewModel.createRoom()
         stompProvider.subscribeOnTracks(roomId)
+        viewModel.getGenreMusicByName("КЛАССИКА")
 
     }
 
-    LaunchedEffect(key1 = roomUiState){
+
+
+    LaunchedEffect(key1 = roomUiState) {
         qr = roomUiState.roomDataEntity?.artifact ?: "HUI"
     }
 
-    LaunchedEffect(key1 = navDirection){
-        when(navDirection){
+    LaunchedEffect(key1 = navDirection) {
+        when (navDirection) {
             RoomNavDirection.PopBackStack -> onClickBack()
             RoomNavDirection.Default -> {
             }
@@ -197,9 +222,11 @@ fun RoomScreen(
         }
 
     ) { paddingValues ->
-        Box(modifier = modifier
-            .padding(bottom = paddingValues.calculateBottomPadding())
-            .background(color = AppResources.colors.Black)) {
+        Box(
+            modifier = modifier
+                .padding(bottom = paddingValues.calculateBottomPadding())
+                .background(color = AppResources.colors.Black)
+        ) {
             if (isDialogVisible) {
                 Dialog(
                     onDismissRequest = { isDialogVisible = false }
@@ -258,7 +285,10 @@ fun RoomScreen(
                                 .padding(10.dp)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.link_in_room, "http://300notes/room/join/$roomId-${roomUiState.roomDataEntity?.artifact}"),
+                                text = stringResource(
+                                    id = R.string.link_in_room,
+                                    "http://300notes/room/join/$roomId-${roomUiState.roomDataEntity?.artifact}"
+                                ),
                                 style = AppResources.typography.titles.title1,
                                 color = AppResources.colors.White,
                                 textAlign = TextAlign.Center,
@@ -267,7 +297,7 @@ fun RoomScreen(
                                 modifier = Modifier
                                     .weight(1f)
 
-                                )
+                            )
                             Icon(
                                 imageVector = Icons.Default.CopyAll,
                                 contentDescription = null,
@@ -337,18 +367,17 @@ fun RoomScreen(
                     item {
                         AddParticipantIcon {
                             isDialogVisible = !isDialogVisible
+                        }
+                    }
 
-                        }
+                    items(roomUiState.roomParticipantsFullDataEntity) { fullDescription ->
+                        ParticipantImageAndName(
+                            isOwner = roomUiState.roomDataEntity?.ownerId == fullDescription.userId,
+                            username = fullDescription.username,
+                            userPhotoUrl = fullDescription.profilePictureUrl
+                        )
                     }
-                    if (roomUiState.roomParticipantsFullDataEntity.isNotEmpty()) {
-                        items(roomUiState.roomParticipantsFullDataEntity) { fullDescription ->
-                            ParticipantImageAndName(
-                                isOwner = roomUiState.roomDataEntity?.ownerId == fullDescription.userId,
-                                username = fullDescription.username,
-                                userPhotoUrl = fullDescription.profilePictureUrl
-                            )
-                        }
-                    }
+
                 }
 
                 Row(
@@ -370,8 +399,20 @@ fun RoomScreen(
                     }
                 }
 
-                LazyColumn(modifier = Modifier.padding(top = 12.dp)) {
-
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .fillMaxHeight()
+                ) {
+                    if (selectedTab == TabModel.ParticipantsAdvices) {
+                        items(roomUiState.soundList) { item ->
+                            OfferItem(item = item, modifier = Modifier)
+                        }
+                    } else {
+                        items(roomUiState.soundList) { item ->
+                            QueueItem(item = item, modifier = Modifier)
+                        }
+                    }
                 }
             }
         }
