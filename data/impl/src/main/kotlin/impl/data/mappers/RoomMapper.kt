@@ -15,6 +15,8 @@ fun RoomFullDataDto.asEntity(): RoomAllInfoEntity {
         messages = messages.map { it.asEntity() },
         users = users,
         isOwner = owner,
+        offers = offers,
+        artifact = artifact
     )
 }
 

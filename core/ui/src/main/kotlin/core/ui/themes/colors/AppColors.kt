@@ -17,6 +17,7 @@ sealed class AppColors(
     val Grey80: Color,
     val Grey90: Color,
     val Grey90_60: Color,
+    val SystemError: Color,
 ) {
     class DarkThemeAppColors : AppColors(
         Black = Black,
@@ -29,6 +30,7 @@ sealed class AppColors(
         Grey80 = Grey80,
         Grey90 = Grey90,
         Grey90_60 = Grey90_60,
+        SystemError = SystemError,
     )
 }
 

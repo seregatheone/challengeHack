@@ -112,6 +112,7 @@ dependencies {
     implementation(Dependencies.WebRtc.lib)
     implementation(Dependencies.WebRtc.logger)
 
+    implementation ("com.google.zxing:core:3.4.0")
     //module
     implementation(project(":core:ui"))
 

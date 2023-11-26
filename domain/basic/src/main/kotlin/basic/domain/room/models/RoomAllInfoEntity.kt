@@ -5,5 +5,7 @@ data class RoomAllInfoEntity (
     val tracks : List<TrackResponseEntity>,
     val messages : List<ChatMessageEntity>,
     val users : List<Long>,
-    val isOwner : Boolean
+    val isOwner : Boolean,
+    val offers: List<Long>,
+    val artifact: String
 )
