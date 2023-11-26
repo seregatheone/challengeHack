@@ -142,8 +142,11 @@ object Dependencies {
     }
 
     object ExoPlayer{
-        val version = "2.19.1"
-        val lib = "com.google.android.exoplayer:exoplayer:$version"
+        private const val version = "2.19.1"
+        const val lib = "com.google.android.exoplayer:exoplayer:$version"
+
+        private const val hlsVersion = "1.2.0"
+        const val hlsLib = "androidx.media3:media3-exoplayer-hls:$hlsVersion"
     }
 
     object Testing{

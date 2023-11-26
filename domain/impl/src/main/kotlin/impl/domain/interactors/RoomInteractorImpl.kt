@@ -5,6 +5,7 @@ import basic.domain.room.interactors.RoomInteractor
 import basic.domain.room.models.RoomAllInfoEntity
 import basic.domain.room.models.RoomsInvitationEntity
 import common.domain.entity.Entity
+import java.io.InputStream
 
 class RoomInteractorImpl(
     private val roomRepository: RoomRepository
@@ -23,6 +24,10 @@ class RoomInteractorImpl(
 
     override suspend fun getAllInvites(): Entity<List<RoomsInvitationEntity>> {
         return roomRepository.getAllInvites()
+    }
+
+    override suspend fun getHlsMusicStream(m3u8Url: String): Entity<InputStream> {
+        return roomRepository.getHlsMusicStream(m3u8Url)
     }
 
 }

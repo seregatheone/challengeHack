@@ -14,9 +14,12 @@ interface WebsocketStompDataConnector {
     fun connectToChatToListening(roomId : Long)
     fun disconnectFromChat()
 
-
+////
     fun listenToInvites()
     fun acceptOffer(roomId : Long)
     fun declineOffer(roomId : Long)
+    /////
+
+    fun subscribeOnTracks(roomId : Long)
 
 }

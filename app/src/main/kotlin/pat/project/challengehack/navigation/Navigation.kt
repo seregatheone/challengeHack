@@ -204,7 +204,9 @@ fun Navigation(
                     modifier = Modifier.fillMaxSize(),
                     roomId = roomId,
                     onClickBack = {
-                        navController.popBackStack()
+                        navController.navigate(
+                            Screens.Friends.destination()
+                        )
                     },
                     navigateToChat = { mineId : Long ->
                         navController.navigate(

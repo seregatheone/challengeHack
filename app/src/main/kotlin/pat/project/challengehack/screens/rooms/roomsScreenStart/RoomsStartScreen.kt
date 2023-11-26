@@ -69,6 +69,10 @@ fun RoomsStartScreen(
         }
     }
 
+    LaunchedEffect(key1 = Unit){
+        websocket.listenToInvites()
+    }
+
     val launchCameraPermission = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permission ->

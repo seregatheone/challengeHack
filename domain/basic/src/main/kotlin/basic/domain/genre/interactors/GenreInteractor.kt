@@ -7,4 +7,6 @@ import common.domain.entity.Entity
 interface GenreInteractor {
     suspend fun getGenreMusicByName(genreName: String) : Entity<List<TrackEntity>>
     suspend fun getGenreInfo(genreName: String) : Entity<GenreEntity>
+
+    suspend fun getTrackById(trackId : Long) : Entity<TrackEntity>
 }

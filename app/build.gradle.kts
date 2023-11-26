@@ -116,6 +116,7 @@ dependencies {
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
     //
     implementation(Dependencies.ExoPlayer.lib)
+//    implementation(Dependencies.ExoPlayer.hlsLib)
 
     //module
     implementation(project(":core:ui"))

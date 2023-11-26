@@ -2,7 +2,9 @@ package challengeHack.api
 
 import challengeHack.dto.rooms.response.RoomFullDataDto
 import challengeHack.dto.rooms.response.RoomsInvitationDtoResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -22,4 +24,10 @@ interface RoomApi {
     ): Response<RoomFullDataDto>
 
     suspend fun getAllInvites() : Response<List<RoomsInvitationDtoResponse>>
+
+    @GET("api/v2/music/track/{url}")
+    suspend fun getHlsMusicStream(
+        @Path("url")
+        m3u8Url : String
+    ): Response<ResponseBody>
 }

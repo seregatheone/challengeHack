@@ -2,13 +2,25 @@ package pat.project.challengehack.services.websocket
 
 import android.app.Service
 import android.content.Intent
+import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import basic.data.webRtc.AudioHandler
+import basic.domain.genre.interactors.GenreInteractor
+import basic.domain.room.interactors.RoomInteractor
 import basic.domain.websocket.WebsocketMessageReceivedEntity
 import basic.domain.websocket.WebsocketMessageSendEntity
 import basics.WebRtcSocketProvider
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Timeline
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.hls.HlsManifest
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import common.domain.entity.Entity
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import impl.data.managers.WebRtcSessionManager
@@ -26,11 +38,12 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import pat.project.challengehack.services.audio.handlers.AudioSwitchHandler
 import websockets.basics.StompWebsocketProvider
+import java.io.InputStream
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataConnector {
+class WebsocketService : Service(), WebsocketStompDataConnector, WebRtcDataConnector {
     // Binder given to clients.
     private val binder = LocalBinder()
 
@@ -48,11 +61,14 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     @Inject
     lateinit var stompWebsocketProviderImpl: Lazy<StompWebsocketProviderImpl>
 
-    private val stompWebsocketProvider : StompWebsocketProvider by lazy{
+    @Inject
+    lateinit var genreInteractor: GenreInteractor
+
+    private val stompWebsocketProvider: StompWebsocketProvider by lazy {
         stompWebsocketProviderImpl.get()
     }
 
-    private val stompWebRtcProvider : WebRtcSocketProvider by lazy{
+    private val stompWebRtcProvider: WebRtcSocketProvider by lazy {
         stompWebsocketProviderImpl.get()
     }
 
@@ -60,13 +76,12 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     private val audioHandler: AudioHandler = AudioSwitchHandler(this@WebsocketService)
     private val streamPeerConnectionFactory = StreamPeerConnectionFactory(this@WebsocketService)
 
-    override val sessionManager : WebRtcSessionManager by lazy {
+    override val sessionManager: WebRtcSessionManager by lazy {
         WebRtcSessionManagerImpl(
             this@WebsocketService,
             audioHandler = audioHandler,
             signalingClient = stompWebRtcProvider,
             peerConnectionFactory = streamPeerConnectionFactory
-
         )
     }
 
@@ -109,6 +124,25 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
         )
     }
 
+    override fun subscribeOnTracks(roomId: Long) {
+        stompWebsocketProvider.listenToTracks(roomId)
+
+        serviceScope.launch {
+            stompWebsocketProvider.trackFlow.collectLatest {
+                when(val result = genreInteractor.getTrackById(it)){
+                    is Entity.Success -> {
+                        initializeExoPlayer(result.data.trackUrl)
+                    }
+
+                    is Entity.Error -> {
+
+                    }
+
+                }
+            }
+        }
+    }
+
     override fun listenToInvites() {
         stompWebsocketProvider.listenToInvites()
     }
@@ -117,7 +151,7 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     override fun connectToWebRtc(roomId: Long) {
         stompWebRtcProvider.connectWebRtc(roomId)
         serviceScope.launch {
-            sessionManager.signalingClient.sessionStateFlow.collectLatest {sessionState ->
+            sessionManager.signalingClient.sessionStateFlow.collectLatest { sessionState ->
                 Log.i("sessionState", sessionState.name)
             }
 
@@ -129,6 +163,69 @@ class WebsocketService() : Service(), WebsocketStompDataConnector, WebRtcDataCon
     }
 
     override fun disconnectWebRtc() {
-        TODO("Not yet implemented")
     }
+
+    //////////////////////////// EXO PLAYER
+
+//    fun launchNewTrack(url : String){
+//        serviceScope.launch {
+//            when(val inputStream = roomInteractor.getHlsMusicStream(url)){
+//                is Entity.Success -> {
+//                    initializeExoPlayer(
+//                        inputStream
+//                    )
+//                }
+//                is Entity.Error -> {}
+//            }
+//        }
+//    }
+
+    private var exoPlayer: ExoPlayer? = null
+    private val exoPlayerListener by lazy { ExoPlayerListener() }
+
+    private var playPauseState = true
+    private var currentWindow = 0
+    private var playbackPosition = 0L
+
+    private fun initializeExoPlayer(m3u8Url: String) {
+        exoPlayer = ExoPlayer.Builder(this@WebsocketService).build()
+        exoPlayer?.let {
+            val mediaSource = buildMediaSource(m3u8Url)
+            it.setMediaSource(mediaSource)
+            it.playWhenReady = playPauseState
+            it.seekTo(currentWindow, playbackPosition)
+            it.prepare()
+        }
+    }
+
+    private fun buildMediaSource(url: String): MediaSource {
+
+        // using DefaultHttpDataSourceFactory for http data source
+        val dataSourceFactory = DefaultHttpDataSource.Factory()
+
+        // Set a custom authentication request header
+        // dataSourceFactory.setDefaultRequestProperty("Header", "Value")
+
+        // setAllowChunklessPreparation()
+
+        // create HLS Media Source
+        return HlsMediaSource.Factory(dataSourceFactory)
+//            .createMediaSource(MediaItem.Builder().build())
+            .createMediaSource(MediaItem.fromUri(Uri.parse(url)))
+    }
+
+
+    inner class ExoPlayerListener : Player.Listener {
+        override fun onTimelineChanged(timeline: Timeline, reason: Int) {
+
+            exoPlayer?.let {
+                val manifest = it.currentManifest
+                manifest?.let {
+                    val hlsManifest = it as HlsManifest
+                }
+            }
+        }
+    }
+
+
 }
