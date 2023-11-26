@@ -6,12 +6,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import pat.project.challengehack.LocalWebRtcDataConnector
+import pat.project.challengehack.LocalWebsocketConnector
 import pat.project.challengehack.navigation.bottomNavBar.BottomNavBar
 import pat.project.challengehack.navigation.utils.currentChildScreen
 
@@ -23,42 +29,40 @@ fun ContainerScreen(
     navigation: @Composable (modifier : Modifier) -> Unit
 ) {
 
-//    val websocketService = LocalWebsocketConnector.current
-//    val webRtcConnector = LocalWebRtcDataConnector.current
+    val websocketService = LocalWebsocketConnector.current
 
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    DisposableEffect(lifecycleOwner) {
-//        // Create an observer that triggers our remembered callbacks
-//        // for sending analytics events
-//        val observer = LifecycleEventObserver { _, event ->
-//            when (event) {
-//                Lifecycle.Event.ON_CREATE -> {
-//                    websocketService.initStompWebsocket()
-//                    webRtcConnector.connectToWebRtc()
-//                }
-//
-//                Lifecycle.Event.ON_RESUME -> {
-//                    websocketService.reconnectStompWebsocket()
-//                }
-//
-//                Lifecycle.Event.ON_DESTROY -> {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        // Create an observer that triggers our remembered callbacks
+        // for sending analytics events
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_CREATE -> {
+                    websocketService.initStompWebsocket()
+                }
+
+                Lifecycle.Event.ON_RESUME -> {
+                    websocketService.reconnectStompWebsocket()
+                }
+
+                Lifecycle.Event.ON_DESTROY -> {
 //                    websocketService.disconnectStompWebsocket()
-//                }
-//
-//                else -> {
-//
-//                }
-//            }
-//        }
-//
-//        // Add the observer to the lifecycle
-//        lifecycleOwner.lifecycle.addObserver(observer)
-//
-//        // When the effect leaves the Composition, remove the observer
-//        onDispose {
-//            lifecycleOwner.lifecycle.removeObserver(observer)
-//        }
-//    }
+                }
+
+                else -> {
+
+                }
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     val profilePhoto by viewModel.profileImage.collectAsState()
 

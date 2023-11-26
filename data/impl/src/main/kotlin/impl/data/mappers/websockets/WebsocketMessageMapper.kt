@@ -19,6 +19,7 @@ fun WebsocketMessageReceivedDto.toEntity(): WebsocketMessageReceivedEntity {
     return WebsocketMessageReceivedEntity(
         text = this.content,
         sendTime = this.sendTimestamp,
-        senderId = this.senderId
+        senderId = this.senderId,
+        senderUrl = this.senderPictureUrl,
     )
 }

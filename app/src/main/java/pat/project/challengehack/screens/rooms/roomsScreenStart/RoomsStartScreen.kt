@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import core.ui.components.buttons.filled.FilledColorRoundedButton
 import core.ui.themes.AppResources
 import pat.project.challengehack.LocalWebRtcDataConnector
+import pat.project.challengehack.LocalWebsocketConnector
 import pat.project.challengehack.MainActivity
 import pat.project.challengehack.R
 import pat.project.challengehack.screens.rooms.roomsScreenStart.components.InvitationComponent
@@ -56,6 +57,8 @@ fun RoomsStartScreen(
 
     val roomUiState by viewModel.roomUiState.collectAsState()
     val roomsNavDirections by viewModel.roomsNavDirections.collectAsState()
+
+    val websocket = LocalWebsocketConnector.current
 
     LaunchedEffect(key1 = roomsNavDirections) {
         when (roomsNavDirections) {
@@ -181,8 +184,12 @@ fun RoomsStartScreen(
                 items(roomUiState.invitationList) { item ->
                     InvitationComponent(
                         invitationEntity = item,
-                        acceptInvitation = {},
-                        declineInvitation = {},
+                        acceptInvitation = {
+//                            websocket.acceptOffer(roomId = )
+                        },
+                        declineInvitation = {
+//                            websocket.declineOffer(roomId = )
+                        },
                     )
                 }
 

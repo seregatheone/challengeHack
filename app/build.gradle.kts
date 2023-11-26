@@ -112,6 +112,9 @@ dependencies {
     implementation(Dependencies.WebRtc.lib)
     implementation(Dependencies.WebRtc.logger)
 
+    //
+    implementation(Dependencies.ExoPlayer.lib)
+
     //module
     implementation(project(":core:ui"))
 

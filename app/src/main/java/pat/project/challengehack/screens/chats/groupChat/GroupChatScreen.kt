@@ -34,14 +34,10 @@ fun GroupChatScreen(
 
     val websocketStompDataConnector = LocalWebsocketConnector.current
 
-
-    BackHandler {
-        websocketStompDataConnector.disconnectFromChat()
-        onBackPressed()
-    }
-
     LaunchedEffect(key1 = Unit) {
 //        viewModel.getRoomInfoById(roomId)
+        viewModel.setRoomId(roomId)
+        viewModel.setMineId(myId)
         viewModel.setWebsocketConnector(
             websocketStompDataConnector,
             roomId
@@ -53,7 +49,6 @@ fun GroupChatScreen(
         ChatScaffold(
             modifier = modifier,
             onBackPressed = {
-                websocketStompDataConnector.disconnectFromChat()
                 onBackPressed()
             },
             messagesPagingList = uiState.chatMessages,
